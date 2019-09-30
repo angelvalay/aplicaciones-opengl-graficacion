@@ -12,7 +12,7 @@ struct ColorRGB{
 };
 
 const ColorRGB COLOR_ROJO{1,0,0};
-const ColorRGB COLOR_BLANCO{0,0,0};
+const ColorRGB COLOR_BLANCO{1,1,1};
 const ColorRGB COLOR_AZUL{0,0,1};
 const ColorRGB COLOR_VERDE{0,1,0};
 
