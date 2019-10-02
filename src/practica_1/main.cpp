@@ -95,17 +95,17 @@ vector<Dato> leer_csv(string nombre_archivo)
 int main(int argc, char **argv)
 {
     // Se valida que exactamente tenga como entrada el archivo fuente de datos
-//    if (argc != 2){
-//        cerr<<"./app nombre_archivo.csv"<<endl;
-//        cerr<<"No se ingreso un archivo de entrada como argumento, intentenlo de nuevo"<<endl;
-//        exit(0);
-//    }
+    if (argc != 1){
+        cerr<<"./app nombre_archivo.csv"<<endl;
+        cerr<<"No se ingreso un archivo de entrada como argumento, intentenlo de nuevo"<<endl;
+        exit(0);
+    }
     //Llama a la funcion para obtener los datos con el argumento del archivo
-    datos = leer_csv("/home/angel/PycharmProjects/practicas-graficacion/school_year.csv");
+    datos = leer_csv(argv[1]);
     //Se pide el titulo para la grafica
-//    cout<<"Ingrese un titulo para la grafica que sera mostrado en la aplicacion"<<endl;
-//    getline(cin,tituloVentana);
-    tituloVentana = "Practica 1 | Grafica lineal";
+    cout<<"Ingrese un titulo para la grafica que sera mostrado en la aplicacion"<<endl;
+    getline(cin,tituloVentana);
+
     // Para generar las configuraciones iniciales de la ventana
     generarPantalla(argc, argv,"Practica 1 | Grafica lineal");
     // Funcion para dibujar en pantalla los graficos necesarios
