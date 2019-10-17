@@ -24,7 +24,7 @@ pan_x = 0.0
 pan_y = 0.0
 
 #dimensiones del gif
-dimen = 5
+dimen = 9
 
 #timer
 refreshMillis = 10
@@ -176,12 +176,7 @@ def generatePoints(dim, len, posX, posY):
     # global dimen
     if (dim == dimen):
         pointsStart.append(PointStart(posX , posY, len, 5))
-        # pointsStart.append(PointStart(posX , posY, len))
-        # generatePoints(dim - 1, len / 2, posX - (len / 2), posY)
-        # generatePoints(dim - 1, len / 2, posX + (len / 2), posY)
     if(dim > 0):
-        #     pointsStart.append(PointStart(posX, posY, len))
-        # else:
         if(dim%2 == 0):
             pointsStart.append(PointStart(posX + (len/2), posY, len/2, 2))
             pointsStart.append(PointStart(posX - (len/2), posY, len/2, 4))
@@ -217,11 +212,7 @@ def timer(value):
 # PAra mostrar las opciones
 def printInteraction():
     print("Interaction:")
-    print("Presiona +/- para incrementar/decrementar la fuerza W(Newtons) que se aplica.")
     print("Presiona [ESCAPE] para finalizar.")
-    print("Presiona L/l para incrementar/decrementar el angulo aplha.")
-    print("Presiona R/r para incrementar/decrementar el angulo beta")
-
 
 # FUncion para iniciar
 def init():
