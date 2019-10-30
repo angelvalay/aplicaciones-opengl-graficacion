@@ -23,14 +23,16 @@ zoom = 1.0
 pan_x = 0.0
 pan_y = 0.0
 
-#dimensiones del gif
+#dimensiones del fractal
 dimen = 9
 
 #timer
 refreshMillis = 10
 
+# Lista para guardar los puntos a dibujar
 pointsStart = []
 
+# Funcion para dibujar una circuferencia
 def drawCircuference(radius, posX, posY):
     glBegin(GL_LINE_LOOP)
     t = 0.0
@@ -40,7 +42,7 @@ def drawCircuference(radius, posX, posY):
         glVertex3f(X1, Y1, 0.0)
         t += 2 * PI / 60
     glEnd()
-
+# FUncion para dibujar un circulo
 def drawCircle(radius, posX, posY):
     t = 0.0
     glBegin(GL_POLYGON)
@@ -50,7 +52,7 @@ def drawCircle(radius, posX, posY):
         glVertex3f(X1, Y1, 0.0)
         t += 2 * PI / 60
     glEnd()
-
+# FUncion para dibujar una linea
 def drawLine(x1,y1,x2,y2):
     glBegin(GL_LINES)
     glVertex3f(x1, y1, 0)
@@ -209,7 +211,7 @@ def timer(value):
     glutTimerFunc(refreshMillis, timer, 0)
 
 
-# PAra mostrar las opciones
+# Para mostrar las opciones
 def printInteraction():
     print("Interaction:")
     print("Presiona [ESCAPE] para finalizar.")
@@ -230,7 +232,7 @@ def resize(w, h):
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-# DIsplay
+# Display
 def displayMe():
     global zoom, pan_x, pan_y
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -245,7 +247,7 @@ def displayMe():
     glutSwapBuffers()
 
 
-# FUncion para dibujar texto
+# Funcion para dibujar texto
 def drawTextOnDisplay(string):
     for character in string:
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(character))
@@ -259,7 +261,7 @@ def main():
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
     glutInitWindowPosition(100, 100)
     glutInitWindowSize(HeightWin, WidthWin)
-    glutCreateWindow("Aplicacion de vectores en fisica | Practica 3")
+    glutCreateWindow("Fractal complejo | Practica 3")
     glutReshapeFunc(resize)
     glutDisplayFunc(displayMe)
     glutTimerFunc(0,timer,0)
