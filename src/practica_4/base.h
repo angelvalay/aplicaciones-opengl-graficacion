@@ -235,7 +235,6 @@ void DibujaCilindro (GLdouble X, GLdouble Y, GLfloat LADOS, GLdouble radio, bool
     GLfloat Puntos2[40][3];
 
     glBegin(GL_POLYGON);
-//    glColor3f(1.0,0.0,1.0);
     GLdouble auxZ =0;
     Contador = 0;
     //printf ("\n Puntos Primer Poligono ");
@@ -251,14 +250,12 @@ void DibujaCilindro (GLdouble X, GLdouble Y, GLfloat LADOS, GLdouble radio, bool
 
     //printf ("\n Puntos Segundo Poligono ");
     glBegin(GL_POLYGON);
-//    glColor3f(1.0,0.0,0.0);
     Contador = 0;
     for(angle = 0.0f; angle < ((!mitad)?2.0f*GL_PI:GL_PI); angle += ((!mitad)?2.0f*GL_PI:GL_PI)/LADOS)
     {
         Puntos2[Contador][0] = auxRadio*sin(angle)+X;
         Puntos2[Contador][1] = auxRadio*cos(angle)+Y;
         Puntos2[Contador][2] = z;
-//        std::cout<<z<<std::endl;
         glVertex3fv(Puntos2[Contador]);
         Contador++;
     }
