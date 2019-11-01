@@ -5,7 +5,7 @@
 #ifndef PRACTICAS_UTILS_H
 #define PRACTICAS_UTILS_H
 
-#define SIZE 500
+#define SIZE 400
 #define NUM_SQUARES 6
 
 

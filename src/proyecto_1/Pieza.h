@@ -16,6 +16,8 @@ public:
     Pieza(int pos1[2], int pos2[2], int num);
     GLdouble* getPunto(int index);
 
+    void dibujar();
+
     int getNum() const;
 
     void setNum(int num);
