@@ -1,5 +1,4 @@
 //
-// Created by angel on 30/10/19.
 //
 
 #ifndef PRACTICAS_PIEZA_H
@@ -21,6 +20,8 @@ public:
     int getNum() const;
 
     void setNum(int num);
+
+    bool estaDentro(int x, int y);
 };
 
 

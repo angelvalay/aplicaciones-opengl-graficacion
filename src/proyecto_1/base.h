@@ -1,12 +1,10 @@
 //
-// Created by angel on 31/10/19.
 //
 
 #ifndef PRACTICAS_BASE_H
 #define PRACTICAS_BASE_H
 
 static std::vector<Pieza> piezas;
-
 /**
  * FUncion para dectectar el mouse
  */
@@ -20,12 +18,16 @@ int starty;
 static void
 mouse(int button, int state, int x, int y)
 {
-//    std::cout<<startx<<" "<<starty<<std::endl;
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) {
             moving = 1;
             startx = x;
             starty = y;
+            std::cout<<200-startx<<" "<<220-starty<<std::endl;
+            for (auto & pieza : piezas) {
+                if (pieza.estaDentro(200-startx,220-starty))
+                    std::cout<<"dentro "<<pieza.getNum()<<std::endl;
+            }
         }
         if (state == GLUT_UP) {
             moving = 0;
@@ -40,8 +42,8 @@ motion(int x, int y)
     if (moving) {
         startx = x;
         starty = y;
-        std::cout<<220-startx<<" "<<220-starty<<std::endl;
-        glutPostRedisplay();
+//        std::cout<<200-startx<<" "<<220-starty<<std::endl;
+//        glutPostRedisplay();
     }
 }
 

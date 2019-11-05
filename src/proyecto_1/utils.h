@@ -1,5 +1,4 @@
 //
-// Created by angel on 31/10/19.
 //
 
 #ifndef PRACTICAS_UTILS_H

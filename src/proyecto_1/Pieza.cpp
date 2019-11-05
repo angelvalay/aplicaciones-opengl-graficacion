@@ -1,5 +1,4 @@
-//
-// Created by angel on 30/10/19.
+//.
 //
 
 #include "Pieza.h"
@@ -71,5 +70,11 @@ void Pieza::dibujar() {
     glVertex3dv(this->puntos[3]);
     glEnd();
 }
+
+bool Pieza::estaDentro(int x, int y) {
+    std::cout<<this->puntos[0][0]<<"<"<<x<<"<"<<this->puntos[2][0]<<std::endl;
+    return (x > this->puntos[0][0] && x < this->puntos[2][0] && y > this->puntos[3][1] && y < this->puntos[1][1]);
+}
+
 
 

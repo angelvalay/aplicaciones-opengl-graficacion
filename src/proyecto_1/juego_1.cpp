@@ -1,9 +1,8 @@
 //
-// Created by angel on 24/10/19.
 //
 #include <iostream>
 #include <vector>
-#include "../core/Librerias.h"
+#include "Librerias.h"
 #include "utils.h"
 #include "Pieza.cpp"
 #include "base.h"
