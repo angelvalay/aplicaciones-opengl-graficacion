@@ -24,7 +24,132 @@ float lightDifAndSpec0[] = { 1.0, 1.0, 1.0, 1.0 };
 float lightPos0[] = { 0.0, -150.0, 1500, 1.0 };
 float globAmb[] = { 0.2, 0.2, 0.2, 1.0 };
 
+// Material
+GLfloat mat_ambient_cubo[] = {0.1, 0.1, 0.1, 1.0f};
+GLfloat mat_diffuse_cubo[] = {0.0, 0.0, 0.8, 1.0f};
+GLfloat mat_specular_cubo[] = {0.9, 0.9, 0.9, 1.0f};
+
 static float xAngle = 0.0, yAngle = 0.0; // Rotation angles of white light.
+
+void makeFigure(){
+    glLoadIdentity();
+    glTranslatef(-0, -0, zoom);
+    glRotatef(angleX, 1.0, 0.0,0.0);
+    glRotatef(angleY, 0.0, 1.0,0.0);
+    glRotatef(angleZ, 0.0, 0.0,1.0);
+//        glColor3f(0.2,0.2,0.2);
+    DibujarBase1();
+    DibujarBase2();
+    DibujarBase3();
+    glPushMatrix();
+    glRotatef(267,0.0,0.0,1.0);
+    DibujaCilindro(-10,0,30, 200, true,50);
+    glPopMatrix();
+    DibujarBase4();
+    glPushMatrix();
+    glTranslatef(0,0,300);
+//        glColor3f(0.4,0.4,0.4);
+    DibujaCilindro(0,375,30,325,false,50);
+    glPopMatrix();
+//        glColor3f(0.2,0.2,0.2);
+    DibujarBase5();
+    //
+    glPushMatrix();
+    glTranslatef(30,0,475);
+    glRotatef(90,0,1,0);
+//        glColor3f(0.55,0.55,0.55);
+    DibujaCilindro(-30,0,30,35,false,30);
+//        glColor3f(0.3,0.3,0.3);
+    DibujaCilindro(-30,0,30,40,false,28);
+    glPopMatrix();
+    //
+    glPushMatrix();
+    glTranslatef(-30,0,475);
+    glRotatef(-90,0,1,0);
+//        glColor3f(0.55,0.55,0.55);
+    DibujaCilindro(30,0,30,35,false,30);
+//        glColor3f(0.3,0.3,0.3);
+    DibujaCilindro(30,0,30,40,false,28);
+    glPopMatrix();
+    //
+    glPushMatrix();
+    glTranslatef(-30,0,975);
+    glRotatef(-90,0,1,0);
+//        glColor3f(0.55,0.55,0.55);
+    DibujaCilindro(30,165,30,48,false,30);
+//        glColor3f(0.3,0.3,0.3);
+    DibujaCilindro(30,165,30,55,false,28);
+    glPopMatrix();
+    //
+    glPushMatrix();
+    glTranslatef(30,0,975);
+    glRotatef(90,0,1,0);
+//        glColor3f(0.55,0.55,0.55);
+    DibujaCilindro(-30,165,30,48,false,30);
+//        glColor3f(0.3,0.3,0.3);
+    DibujaCilindro(-30,165,30,55,false,28);
+    glPopMatrix();
+
+    //DIBUJAR LENTE PARA ROTAR
+    glPushMatrix();
+    glTranslatef(-30,165,975);
+    glRotatef(turnUpDown,1,0,0);
+    glTranslatef(30,-165,-275);
+//        glColor3f(0.6,0.6,0.6);
+    DibujaCilindro(0,375,30,120,false,20);
+    glTranslatef(0,0,-20);
+//        glColor3f(0.55,0.55,0.55);
+    DibujaCilindro(0,375,30,110,false,20);
+    glTranslatef(0,0,40);
+//        glColor3f(0.5,0.5,0.5);
+    DibujaCilindro(0,300,30,30,false,330);
+    glPushMatrix();
+    glScalef(1,0.35,1);
+    glTranslatef(0,400,270);
+    glRotatef(-90,1,0,0);
+//            glColor3f(0.5,0.5,0.5);
+    DibujarBase4();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0,0,-110);
+//            glColor3f(0.7,0.7,0.7);
+    DibujaCilindro(0,300,30,30,false,100);
+    glPushMatrix();
+    glTranslatef(0,0,-20);
+//                glColor3f(0.7,0.7,0.7);
+    DibujaCilindro(0,300,20,20,false,20);
+    glPopMatrix();
+    glTranslatef(70,80,0);
+//            glColor3f(0.7,0.7,0.7);
+    DibujaCilindro(0,300,30,30,false,100);
+    glPushMatrix();
+    glTranslatef(0,0,-20);
+//                glColor3f(0.7,0.7,0.7);
+    DibujaCilindro(0,300,20,20,false,20);
+    glPopMatrix();
+    glTranslatef(-140,0,0);
+//            glColor3f(0.7,0.7,0.7);
+    DibujaCilindro(0,300,30,30,false,100);
+    glPushMatrix();
+    glTranslatef(0,0,-20);
+//                glColor3f(0.7,0.7,0.7);
+    DibujaCilindro(0,300,20,20,false,20);
+    glPopMatrix();
+    glPopMatrix();
+    glTranslatef(0,0,330);
+//        glColor3f(0.4,0.4,0.4);
+    DibujaCilindro(0,300,30,35,false,30);
+    glTranslatef(0,0,20);
+//        glColor3f(0.6,0.6,0.6);
+    DibujaCilindro(0,300,30,30,false,20);
+    glTranslatef(0,0,20);
+//        glColor3f(0.6,0.6,0.6);
+    DibujaCilindro(0,300,30,20,false,50);
+    glTranslatef(0,0,50);
+//        glColor3f(0.4,0.4,0.4);
+    DibujaCilindro(0,300,30,25,false,10);
+    glPopMatrix();
+}
 
 void drawScene(){
 
@@ -46,131 +171,16 @@ void drawScene(){
     glRotatef(yAngle, 0.0, 1.0, 0.0); // Rotation about z-axis.
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos0);
     glTranslatef(lightPos0[0], lightPos0[1], lightPos0[2]);
-    glColor3f(1.0, 1.0, 1.0);
+//    glColor3f(1.0, 1.0, 1.0);
     glutWireSphere(200, 8, 8); // Sphere at positional light source
 
     glPopMatrix();
     glEnable(GL_LIGHTING);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
 
-    glLoadIdentity();
-        glTranslatef(-0, -0, zoom);
-        glRotatef(angleX, 1.0, 0.0,0.0);
-        glRotatef(angleY, 0.0, 1.0,0.0);
-        glRotatef(angleZ, 0.0, 0.0,1.0);
-        glColor3f(0.2,0.2,0.2);
-        DibujarBase1();
-        DibujarBase2();
-        DibujarBase3();
-        glPushMatrix();
-        glRotatef(267,0.0,0.0,1.0);
-        DibujaCilindro(-10,0,30, 200, true,50);
-    glPopMatrix();
-    DibujarBase4();
-    glPushMatrix();
-        glTranslatef(0,0,300);
-        glColor3f(0.4,0.4,0.4);
-        DibujaCilindro(0,375,30,325,false,50);
-        glPopMatrix();
-        glColor3f(0.2,0.2,0.2);
-    DibujarBase5();
-    //
-    glPushMatrix();
-        glTranslatef(30,0,475);
-        glRotatef(90,0,1,0);
-        glColor3f(0.55,0.55,0.55);
-        DibujaCilindro(-30,0,30,35,false,30);
-        glColor3f(0.3,0.3,0.3);
-        DibujaCilindro(-30,0,30,40,false,28);
-    glPopMatrix();
-    //
-    glPushMatrix();
-        glTranslatef(-30,0,475);
-        glRotatef(-90,0,1,0);
-        glColor3f(0.55,0.55,0.55);
-        DibujaCilindro(30,0,30,35,false,30);
-        glColor3f(0.3,0.3,0.3);
-        DibujaCilindro(30,0,30,40,false,28);
-    glPopMatrix();
-    //
-    glPushMatrix();
-        glTranslatef(-30,0,975);
-        glRotatef(-90,0,1,0);
-        glColor3f(0.55,0.55,0.55);
-        DibujaCilindro(30,165,30,48,false,30);
-        glColor3f(0.3,0.3,0.3);
-        DibujaCilindro(30,165,30,55,false,28);
-    glPopMatrix();
-    //
-    glPushMatrix();
-        glTranslatef(30,0,975);
-        glRotatef(90,0,1,0);
-        glColor3f(0.55,0.55,0.55);
-        DibujaCilindro(-30,165,30,48,false,30);
-        glColor3f(0.3,0.3,0.3);
-        DibujaCilindro(-30,165,30,55,false,28);
-    glPopMatrix();
-
-    //DIBUJAR LENTE PARA ROTAR
-    glPushMatrix();
-        glTranslatef(-30,165,975);
-        glRotatef(turnUpDown,1,0,0);
-        glTranslatef(30,-165,-275);
-        glColor3f(0.6,0.6,0.6);
-        DibujaCilindro(0,375,30,120,false,20);
-        glTranslatef(0,0,-20);
-        glColor3f(0.55,0.55,0.55);
-        DibujaCilindro(0,375,30,110,false,20);
-        glTranslatef(0,0,40);
-        glColor3f(0.5,0.5,0.5);
-        DibujaCilindro(0,300,30,30,false,330);
-        glPushMatrix();
-            glScalef(1,0.35,1);
-            glTranslatef(0,400,270);
-            glRotatef(-90,1,0,0);
-            glColor3f(0.5,0.5,0.5);
-            DibujarBase4();
-        glPopMatrix();
-        glPushMatrix();
-            glTranslatef(0,0,-110);
-            glColor3f(0.7,0.7,0.7);
-            DibujaCilindro(0,300,30,30,false,100);
-            glPushMatrix();
-                glTranslatef(0,0,-20);
-                glColor3f(0.7,0.7,0.7);
-                DibujaCilindro(0,300,20,20,false,20);
-            glPopMatrix();
-            glTranslatef(70,80,0);
-            glColor3f(0.7,0.7,0.7);
-            DibujaCilindro(0,300,30,30,false,100);
-            glPushMatrix();
-                glTranslatef(0,0,-20);
-                glColor3f(0.7,0.7,0.7);
-                DibujaCilindro(0,300,20,20,false,20);
-            glPopMatrix();
-            glTranslatef(-140,0,0);
-            glColor3f(0.7,0.7,0.7);
-            DibujaCilindro(0,300,30,30,false,100);
-            glPushMatrix();
-                glTranslatef(0,0,-20);
-                glColor3f(0.7,0.7,0.7);
-                DibujaCilindro(0,300,20,20,false,20);
-            glPopMatrix();
-        glPopMatrix();
-        glTranslatef(0,0,330);
-        glColor3f(0.4,0.4,0.4);
-        DibujaCilindro(0,300,30,35,false,30);
-        glTranslatef(0,0,20);
-        glColor3f(0.6,0.6,0.6);
-        DibujaCilindro(0,300,30,30,false,20);
-        glTranslatef(0,0,20);
-        glColor3f(0.6,0.6,0.6);
-        DibujaCilindro(0,300,30,20,false,50);
-        glTranslatef(0,0,50);
-        glColor3f(0.4,0.4,0.4);
-        DibujaCilindro(0,300,30,25,false,10);
-    glPopMatrix();
+    makeFigure();
 
     glutSwapBuffers();
 }

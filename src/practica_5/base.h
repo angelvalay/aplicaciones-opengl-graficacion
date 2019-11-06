@@ -316,7 +316,7 @@ void DibujaCilindro (GLdouble X, GLdouble Y, GLfloat LADOS, GLdouble radio, bool
         Puntos1[Contador][1] = radio*cos(angle)+Y;
         Puntos1[Contador][2] = auxZ;
         glVertex3fv(Puntos1[Contador]);
-        glNormal3fv(Puntos1[Contador]);
+//        glNormal3fv(Puntos1[Contador]);
         Contador++;
     }
     glEnd();
@@ -330,7 +330,7 @@ void DibujaCilindro (GLdouble X, GLdouble Y, GLfloat LADOS, GLdouble radio, bool
         Puntos2[Contador][1] = auxRadio*cos(angle)+Y;
         Puntos2[Contador][2] = z;
         glVertex3fv(Puntos2[Contador]);
-        glNormal3fv(Puntos2[Contador]);
+//        glNormal3fv(Puntos2[Contador]);
         Contador++;
     }
     glEnd();
@@ -345,13 +345,13 @@ void DibujaCilindro (GLdouble X, GLdouble Y, GLfloat LADOS, GLdouble radio, bool
         else
             Temporal = Contador+1;
         glVertex3fv(Puntos1[Contador]);
-        glNormal3fv(Puntos1[Contador]);
+//        glNormal3fv(Puntos1[Contador]);
         glVertex3fv(Puntos1[Temporal]);
-        glNormal3fv(Puntos1[Temporal]);
+//        glNormal3fv(Puntos1[Temporal]);
         glVertex3fv(Puntos2[Temporal]);
-        glNormal3fv(Puntos2[Temporal]);
+//        glNormal3fv(Puntos2[Temporal]);
         glVertex3fv(Puntos2[Contador]);
-        glNormal3fv(Puntos1[Contador]);
+//        glNormal3fv(Puntos1[Contador]);
         glEnd();
     }
 }
