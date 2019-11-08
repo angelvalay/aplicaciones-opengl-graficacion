@@ -76,6 +76,7 @@ class cube:
     _pointsCube = []
 
     def __init__(self, centerX, centerY, centerZ):
+        # print(centerX, ' ',centerY,' ', centerZ)
         self._centerX = centerX
         self._centerY = centerY
         self._centerZ = centerZ
@@ -148,7 +149,7 @@ class cube:
         self._pointsCube = val
 
     def getPointToArray(self):
-        return [self._centerX, self._centerY,self._centerZ]
+        return [self._centerX, self._centerY ,self._centerZ]
 
     def faces(self, numberFace):
         subPoints = []
@@ -188,6 +189,17 @@ class figure:
     _cubes = []
     def __init__(self, typeFigure, posX, posY, posZ):
         self._cubes.append(cube(posX, posY, posZ))
+        if typeFigure == FIG_L:
+            self._cubes.append(cube(posX, posY, posZ - 1))
+            self._cubes.append(cube(posX, posY, posZ + 1))
+            self._cubes.append(cube(posX + 1, posY, posZ + 1))
+        elif typeFigure == FIG_LINEAL:
+            self._cubes.append(cube(posX, posY, posZ - 1))
+            self._cubes.append(cube(posX, posY, posZ + 1))
+        elif typeFigure == FIG_S:
+            self._cubes.append(cube(posX - 1, posY, posZ))
+            self._cubes.append(cube(posX, posY, posZ + 1))
+            self._cubes.append(cube(posX + 1, posY, posZ + 1))
 
     def moveX(self, posX):
         for cube in self._cubes:
@@ -211,3 +223,19 @@ class figure:
     @cubes.setter
     def cubes(self, val):
         self._cubes = val
+
+    def isValidateMove(self, posX, posY, posZ):
+        # for figure in figures:
+        #     for cubes in figure.cubes:
+        for myCubes in self.cubes:
+            # print(myCubes.getPointToArray())
+            if (myCubes.centerX + posX) >= 3 or (myCubes.centerX + posX) < 0:
+                print('X sobre pasa del terreno')
+                return False
+            elif (myCubes.centerY + posY) < 0:
+                print('Y sobre pasa del terreno')
+                return False
+            elif (myCubes.centerZ + posZ) >=3 or (myCubes.centerZ + posZ) < 0:
+                print('Z sobre pasa del terreno')
+                return False
+        return True

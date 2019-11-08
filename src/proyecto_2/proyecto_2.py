@@ -10,6 +10,7 @@ import random
 import sys
 import array as arr
 import game
+import numpy
 
 PI=3.14159265358979324
 
@@ -31,7 +32,7 @@ zoom_z = 0
 showMessageStart = 0
 
 # Timer
-refreshMillis = 1000
+refreshMillis = 500
 
 # Se crea una malla del eje Y
 wall1 = game.wall(3, 3, (-10, -10, 0), 'Y')
@@ -45,16 +46,35 @@ listPoints2 = wall2.getPoints()
 wall3 = game.wall(10,3,(-10,-10,0),'X')
 listPoints3 = wall3.getPoints()
 
-# Se crea un cubo de prueba
-fig1 = game.figure(10,3,10,3)
+# array de figuras
+# este array guarda las figuras que se van generando para asi mantener todo las figuras
+figures = []
+
+#se anade la figura de prueba a la lista
+figures.append(game.figure(random.randint(0,3),1,10,1))
+# print (figures)
 
 def timer(value):
-    global refreshMillis
+    global refreshMillis, figures, showMessageStart
     # Si el juego ya empezo
     if showMessageStart == 1:
-        # Refresca la pantalla
-        fig1.moveY(-1)
-        glutPostRedisplay()
+        print('figura -> ', figures[-1])
+        for cube in figures[-1].cubes:
+            print(cube.getPointToArray())
+
+        if figures[-1].isValidateMove(0,-1,0):
+            print('puede bajar')
+            # Refresca la pantalla
+            figures[-1].moveY(-1)
+            glutPostRedisplay()
+        else:
+            print('ya no se puede bajar')
+            # Se crea una figura de prueba
+            newFig= game.figure(random.randint(0, 3), 1, 10, 1)
+            figures+=[newFig]
+            print(figures)
+            showMessageStart = 0
+            glutPostRedisplay()
     glutTimerFunc(refreshMillis, timer, 0)
 
 # Para mostrar las opciones
@@ -94,13 +114,13 @@ def keyInput(key, x, y):
         zoom = zoom - 1
 
     if key == b'\170':  # x
-        zoom_x = zoom_x + 1
+        zoom_x = zoom_x + 10
 
     if key == b'\171':  # y
-        zoom_y = zoom_y + 1
+        zoom_y = zoom_y + 10
 
     if key == b'\172':  # z
-        zoom_z = zoom_z + 1
+        zoom_z = zoom_z + 10
 
     if key == b'\040': # space
         if showMessageStart == 0:
@@ -109,13 +129,17 @@ def keyInput(key, x, y):
             showMessageStart = 0
 
     if key == b'\062': # borrar es de prueba 2222
-        fig1.moveZ(1)
+        if figures[-1].isValidateMove(0, 0, 1):
+            figures[-1].moveZ(1)
     if key == b'\070': # borrar es de prueba 8888
-        fig1.moveZ(-1)
+        if figures[-1].isValidateMove(0, 0, -1):
+            figures[-1].moveZ(-1)
     if key == b'\064': # borrar es de prueba 4444
-        fig1.moveX(-1)
+        if figures[-1].isValidateMove(-1, 0, 0):
+            figures[-1].moveX(-1)
     if key == b'\066': # borrar es de prueba 6666
-        fig1.moveX(1)
+        if figures[-1].isValidateMove(1, 0, 0):
+            figures[-1].moveX(1)
 
     glutPostRedisplay()
 
@@ -137,8 +161,11 @@ def displayMe():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
+    gluLookAt(zoom, zoom, zoom, 0.0, 5, 0.0, 0.0, 1.0, 0.0)
+    glRotatef(zoom_x, 1.0, 0.0, 0.0)
+    glRotatef(zoom_y, 0.0, 1.0, 0.0)
+    glRotatef(zoom_z, 0.0, 0.0, 1.0)
     # Agregar lookAt
-    gluLookAt(zoom + zoom_x, zoom + zoom_y, zoom + zoom_z, 0.0, 5, 0.0, 0.0, 1.0, 0.0)
     # Mostrar texto
     displayText()
     # Dibuja la primera malla
@@ -158,18 +185,23 @@ def displayMe():
     for item in listPoints3:
         glVertex3fv(item)
     glEnd()
-    glColor(0.2, 0.9, 0.4)
-    # muestra la figura cubo x cubo
-    for cube in fig1.cubes:
-        # mostrar la cara del cubo cara x cara
-        for face in range(1,6,1):
-            # glPointSize(5)
-            # dibuja el poligono
-            glBegin(GL_POLYGON)
-            # extrae los puntos
-            for point in cube.faces(face):
-                glVertex3fv(point)
-            glEnd()
+    # hago un translei para mover las figuras una mitad del cubo hacia el inferior para que
+    # coloquen bien
+    glTranslatef(game.UNIT_CUBE/2,game.UNIT_CUBE/2,game.UNIT_CUBE/2)
+    # se imprimen las figuras
+    for figure in  figures:
+        # muestra la figura cubo x cubo
+        glColor(0.6, 0.6, 0.6)
+        for cube in figure.cubes:
+            # mostrar la cara del cubo cara x cara
+            for face in range(1,6,1):
+                # glPointSize(5)
+                # dibuja el poligono
+                glBegin(GL_POLYGON)
+                # extrae los puntos
+                for point in cube.faces(face):
+                    glVertex3fv(point)
+                glEnd()
     glutSwapBuffers()
 
 # Funcion principal

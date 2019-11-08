@@ -5,6 +5,8 @@
 #ifndef PRACTICAS_BASE_H
 #define PRACTICAS_BASE_H
 
+#include <cmath>
+
 #define GL_PI 3.1415f
 
 double bases[36][3]={

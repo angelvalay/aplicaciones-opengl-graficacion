@@ -1,27 +1,58 @@
-// LIBRERIAS DEL OPEN GL Y DE ESTANDAR
-#include <stdio.h>
+//
+// PRACTICA 4
+// ANGEL ARMANDO VALAY MARTINEZ
+// Created by angel on 29/10/19.
+//
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>       /* for cos(), sin(), and sqrt() */
-#include <GL/glut.h>    /* OpenGL Utility Toolkit header */
+#include <GL/glut.h>
 #include <iostream>
 #include "base.h"
-
-GLfloat angleY = 360.0;   /* in degrees */
-GLfloat angleX = 280.0;   /* in degrees */
-GLfloat angleZ = 160;
-#define NEAR_Z 1.0
-#define FAR_Z 5000.0	// For the frustum size.
-#define SIZE 700
-float zoom = -2500.0;
-float turnUpDown = 0.0;
+/*Variables globales*/
+GLfloat angleY = 360.0; //Angulo en Y para el movimiento
+GLfloat angleX = 280.0; //Angulo en X para el movimiento
+GLfloat angleZ = 160; //Angulo en Z para el movimiento
+#define NEAR_Z 1.0 // Que tan cerca esta
+#define FAR_Z 5000.0 //QUe tan lejos esta
+#define SIZE 700 //dimensiones de la pantalla
+float zoom = -2500.0; // zoom
+float turnUpDown = 0.0; // animacion hacia arriba o hacia abajo
 static int isAnimate = 0; // Animated?
 static int upDown = 0; // Up 0 Down 1
-static int animationPeriod = 100; // Time interval between fram
+static int animationPeriod = 100; // intervalo de tiempo para la animacion
+/**
+ * Funcion para escribir texto en la pantalla
+ * @param font TIpo de fuente
+ * @param string Letra que se esribira
+ */
+void escribirTextoBitMap(void *font, char *string)
+{
+    char *c;
+    for (c = string; *c != '\0'; c++) glutBitmapCharacter(font, *c);
+}
 
+/**
+ * Funcion para mostrar la informacion en la pantalla
+ */
+void mostrarInfoPractica(){
+    glColor3f(0.0, 0.0, 0.0);
+    glRasterPos3f(-250, -1200, -100.0);
+    escribirTextoBitMap(GLUT_BITMAP_8_BY_13, "Angel Armando Valay Martinez");
+    glRasterPos3f(-250, -1200, 0.0);
+    escribirTextoBitMap(GLUT_BITMAP_8_BY_13, "1730322");
+    glRasterPos3f(-250, -1200, 200.0);
+    escribirTextoBitMap(GLUT_BITMAP_8_BY_13, "INTRODUCCION A LA GRAFICACION ");
+    glRasterPos3f(-250, -1200, 100.0);
+    escribirTextoBitMap(GLUT_BITMAP_8_BY_13, "POR COMPUTADORA");
+}
+
+/**
+ * FUncion para dibujar en la escena
+ */
 void drawScene(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+    mostrarInfoPractica();
+    //cargo el identity
     glLoadIdentity();
         glTranslatef(-0, -0, zoom);
         glRotatef(angleX, 1.0, 0.0,0.0);
@@ -43,7 +74,6 @@ void drawScene(){
         glPopMatrix();
         glColor3f(0.2,0.2,0.2);
     DibujarBase5();
-    //
     glPushMatrix();
         glTranslatef(30,0,475);
         glRotatef(90,0,1,0);
@@ -52,7 +82,6 @@ void drawScene(){
         glColor3f(0.3,0.3,0.3);
         DibujaCilindro(-30,0,30,40,false,28);
     glPopMatrix();
-    //
     glPushMatrix();
         glTranslatef(-30,0,475);
         glRotatef(-90,0,1,0);
@@ -61,7 +90,6 @@ void drawScene(){
         glColor3f(0.3,0.3,0.3);
         DibujaCilindro(30,0,30,40,false,28);
     glPopMatrix();
-    //
     glPushMatrix();
         glTranslatef(-30,0,975);
         glRotatef(-90,0,1,0);
@@ -70,7 +98,6 @@ void drawScene(){
         glColor3f(0.3,0.3,0.3);
         DibujaCilindro(30,165,30,55,false,28);
     glPopMatrix();
-    //
     glPushMatrix();
         glTranslatef(30,0,975);
         glRotatef(90,0,1,0);
@@ -142,14 +169,20 @@ void drawScene(){
     glutSwapBuffers();
 }
 
-// Timer function.
+/**
+ * FUncion oara el timer
+ * @param value valor de entrada
+ */
 void animate(int value)
 {
+    //Esta animado?
     if (isAnimate)
     {
         if (upDown){
+            //Girar hacia arriba
             turnUpDown += 5.0;
         }else{
+            //Girar hacia abajo
             turnUpDown -= 5.0;
         }
 
@@ -161,58 +194,56 @@ void animate(int value)
     }
 }
 
-// Initialization routine.
+/**
+ * Funcion para la configuracion inicial
+ */
 void setup(void)
 {
     glEnable(GL_DEPTH_TEST);
     glClearColor((float)119/254,(float)136/254,(float)153/254, 0.0);
 }
 
+/**
+ * FUncion para el evento de teclado
+ * @param c tipo de entrada
+ * @param x posicion x
+ * @param y posicion y
+ */
 void key(unsigned char c, int x, int y)
 {
     if (c == 'u'){
-//        std::cout<<"turn: "<<turnUpDown<<std::endl;
         if(turnUpDown < 160)
             turnUpDown+=10.0;
     }
     if (c == 'U'){
-//        std::cout<<"turn: "<<turnUpDown<<std::endl;
         if(turnUpDown >-20)
         turnUpDown-=10.0;
     }
     if (c == '+'){
-//        std::cout<<"zoom: "<<zoom<<std::endl;
         zoom+=10.0;
     }if (c == '-'){
-//        std::cout<<"zoom: "<<zoom<<std::endl;
         zoom-=10.0;
     }if (c == 'x'){
-//        std::cout<<"angle x"<<angleX<<std::endl;
         angleX += 10.0;
         if (angleX>360)
             angleX =10;
     } if (c == 'y'){
-//        std::cout<<"angle y"<<angleY<<std::endl;
         angleY += 10.0;
         if (angleY>360)
             angleY =10;
     } if (c == 'z'){
-//        std::cout<<"angle z"<<angleZ<<std::endl;
         angleZ += 10.0;
         if (angleZ>360)
             angleZ =10;
     } if (c == 'X'){
-//        std::cout<<"angle x"<<angleX<<std::endl;
         angleX -= 10.0;
         if (angleX<0)
             angleX=360;
     } if (c == 'Y'){
-//        std::cout<<"angle y"<<angleY<<std::endl;
         angleY -= 10.0;
         if (angleY<0)
             angleY=360;
     } if (c == 'Z'){
-//        std::cout<<"angle z"<<angleZ<<std::endl;
         angleZ -= 10.0;
         if (angleZ<0)
             angleZ=360;
@@ -230,7 +261,11 @@ void key(unsigned char c, int x, int y)
 
     glutPostRedisplay();
 }
-
+/**
+ * Fnciuon para redimensionar
+ * @param w ancho
+ * @param h alto
+ */
 void reshape(int w, int h)
 {
     glViewport(0, -150, w, h);
@@ -239,14 +274,28 @@ void reshape(int w, int h)
     gluPerspective(60.0, w/h, NEAR_Z, FAR_Z);
     glMatrixMode(GL_MODELVIEW);
 }
+/**
+ * FUncion para imprimir en consola la ifnormacion
+ */
+void printInteraction(void)
+{
+    std::cout << "Interacion:" << std::endl;
+    std::cout << "Presiona +/- para hacer zoom" << std::endl;
+    std::cout << "Presiona x/X para rotar en eje X" << std::endl;
+    std::cout << "Presiona y/Y para rotar en eje Y" << std::endl;
+    std::cout << "Presiona z/Z para rotar en eje Z" << std::endl;
+    std::cout << "Presiona SPACE para empezar o pausar la animacion" << std::endl;
+
+}
 
 int main(int argc, char **argv)
 {
+    printInteraction();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
     glutInitWindowSize(SIZE, SIZE);
     glutInitWindowPosition(200, 200);
-    glutCreateWindow("Shadowy Leapin' Lizards");
+    glutCreateWindow("Practica 4 | Modelo 3D Microscopio");
     glutDisplayFunc(drawScene);
     glutKeyboardFunc(key);
     glutReshapeFunc(reshape);
