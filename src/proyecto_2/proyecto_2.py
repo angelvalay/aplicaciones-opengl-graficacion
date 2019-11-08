@@ -61,7 +61,6 @@ def timer(value):
         print('figura -> ', figures[-1])
         for cube in figures[-1].cubes:
             print(cube.getPointToArray())
-
         if figures[-1].isValidateMove(0,-1,0):
             print('puede bajar')
             # Refresca la pantalla
@@ -69,9 +68,9 @@ def timer(value):
             glutPostRedisplay()
         else:
             print('ya no se puede bajar')
+            figures=[]
             # Se crea una figura de prueba
-            newFig= game.figure(random.randint(0, 3), 1, 10, 1)
-            figures+=[newFig]
+            figures.append(game.figure(3, 1, 10, 1))
             print(figures)
             showMessageStart = 0
             glutPostRedisplay()

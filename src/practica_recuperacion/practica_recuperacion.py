@@ -10,78 +10,43 @@ import sys
 from PIL import Image
 import numpy
 
-# Initial values
+# VAlores iniciales
 AlturaVentana = 375
 AnchuraVentana = 1000
 
+# textura
 texture_id = 0
 
+def drawTextOnPosition2D(x, y, text):
+    """
+    Funcion para dibujar texto en 2d
+    :param x: posicion en x del texto
+    :param y: posicion en y del texto
+    :param text: texto a dibujar
+    """
+    glRasterPos3f(x, y, 0.0)
+    drawTextOnDisplay(text)
 
-# FUncion para dibujar texto
-def drawTextOnDisplay(string):
-    for character in string:
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(character))
-
-
-def printInteraction():
-    print("Interaction:")
-    print("Press +/- to increase/decrease the number of vertices on the circle.")
-    print("Press [ESCAPE] to finish.")
-
-
-def init():
-    # red, green, blue, alpha from 0.0 to 1.0
-    global numVertices  # Le dices al python que estas modicando una variable global y no una local de nombre numvertices
-    glClearColor(1.0, 1.0, 1.0, 0.0)
-    texture_id = read_texture('garfield.jpeg')
-
-
-# Keep the aspect ratio of the graphics window and
-# anything we draw will look in proper proportion
-# OpenGL set w and h values as the graphics window's size changes
-def resize(w, h):
-    if h == 0:
-        h = 1
-    glViewport(0, 0, w, h)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    glOrtho(-250, 250, -40, 200.0, -1.0, 1.0)
-    glMatrixMode(GL_MODELVIEW)
-    glLoadIdentity()
-
-
-def keyInput(key, x, y):
-    global numVertices  # Le dices al python que estas modicando una variable global y no una local de nombre numvertices
-    if key == b'\053':  # ESCAPE
-        glutPostRedisplay()
-
-    if key == b'\055':  # +
-        glutPostRedisplay()
-
-    if key == b'\033':  # -
-        sys.exit()
-
-
-def displayMe():
-    glClear(GL_COLOR_BUFFER_BIT)
-    # division vertical
+def drawOriginalFigure():
+    """
+    FUncion para dibujar la figura original
+    """
+    # anadir nombre de la figura original
     glColor3f(0, 0, 0)
-    #anadir texto
-    glRasterPos3f(-180.0, -20.0, 0.0)
-    drawTextOnDisplay('Imagen original')
+    drawTextOnPosition2D(-180,-20,'Imagen original')
 
-    #anadir linea vertical
+    # anadir linea vertical
     glBegin(GL_LINES)
     glVertex3f(0, -40, 0)
     glVertex3f(0, 220, 0)
     glEnd()
 
-    # genera cuadro izquierdo
-    glBindTexture(GL_TEXTURE_2D, texture_id)  # This is what's missing
+    # generar cuadro izquierdo
+    glBindTexture(GL_TEXTURE_2D, texture_id)
     glEnable(GL_TEXTURE_2D)
     glBindTexture(GL_TEXTURE_2D, texture_id)
 
-    #anadir imagen original
+    # anadir imagen original
     glBegin(GL_POLYGON)
     glTexCoord2f(1.0, 1.0)
     glVertex3f(-220, 0, 0)
@@ -93,10 +58,75 @@ def displayMe():
     glVertex3f(-20, 0, 0)
     glEnd()
 
+def drawTextOnDisplay(string):
+    """
+    Funcion para dibujar texto en pantalla
+    :param string: Cadena de texto a dibujar
+    """
+    for character in string:
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(character))
+
+def printInteraction():
+    """
+    Menu de informacion que es visible para la interaccion con el programa
+    """
+    print("Interaction:")
+    print("Press [ESCAPE] to finish.")
+
+def init():
+    """
+    FUncion para inicializar variables, se ejecuta cuando la aplicacion se inicia
+    """
+    # red, green, blue, alpha from 0.0 to 1.0
+    glClearColor(1.0, 1.0, 1.0, 0.0)
+    texture_id = readTexture('garfield.jpeg')
+
+def resize(w, h):
+    """
+    FUncion para capturar el evento de la redimension de pantalla
+    :param w: nueva anchura
+    :param h: nueva altura
+    """
+    if h == 0:
+        h = 1
+    glViewport(0, 0, w, h)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    #generacion del orto
+    glOrtho(-250, 250, -40, 200.0, -1.0, 1.0)
+    glMatrixMode(GL_MODELVIEW)
+    glLoadIdentity()
+
+def keyInput(key, x, y):
+    """
+    FUncion para el evento key
+    :param key: tecla de entrada
+    :param x: en que posicion x
+    :param y: en que posicion y
+    """
+    if key == b'\053':  # ESCAPE
+        glutPostRedisplay()
+
+    if key == b'\055':  # +
+        glutPostRedisplay()
+
+    if key == b'\033':  # -
+        sys.exit()
+
+def displayMe():
+    """
+    FUncion para dibujar en pantalla
+    """
+    glClear(GL_COLOR_BUFFER_BIT)
+    drawOriginalFigure()
     glFlush()
 
-
-def read_texture(filename):
+def readTexture(filename):
+    """
+    FUncion para generar la textura
+    :param filename: DIreccion del archivo
+    :return: el id de la textura
+    """
     img = Image.open(filename)
     # img = img.convert("RGB")
     img_data = numpy.array(list(img.getdata()), numpy.int8)
@@ -114,8 +144,10 @@ def read_texture(filename):
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.size[0], img.size[1], 0, format, GL_UNSIGNED_BYTE, img_data)
     return texture_id
 
-
 def main():
+    """
+    FUncion main
+    """
     printInteraction()
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
@@ -127,6 +159,5 @@ def main():
     glutKeyboardFunc(keyInput)
     init()
     glutMainLoop()
-
 
 main()

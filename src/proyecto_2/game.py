@@ -187,8 +187,10 @@ class cube:
 
 class figure:
     _cubes = []
+    _typeFigure = []
     def __init__(self, typeFigure, posX, posY, posZ):
         self._cubes.append(cube(posX, posY, posZ))
+        self._typeFigure = typeFigure
         if typeFigure == FIG_L:
             self._cubes.append(cube(posX, posY, posZ - 1))
             self._cubes.append(cube(posX, posY, posZ + 1))
@@ -228,14 +230,17 @@ class figure:
         # for figure in figures:
         #     for cubes in figure.cubes:
         for myCubes in self.cubes:
-            # print(myCubes.getPointToArray())
+            print(myCubes.getPointToArray())
             if (myCubes.centerX + posX) >= 3 or (myCubes.centerX + posX) < 0:
                 print('X sobre pasa del terreno')
                 return False
             elif (myCubes.centerY + posY) < 0:
-                print('Y sobre pasa del terreno')
+                print('Y sobre pasa del terreno ', str(myCubes.centerY))
                 return False
             elif (myCubes.centerZ + posZ) >=3 or (myCubes.centerZ + posZ) < 0:
                 print('Z sobre pasa del terreno')
                 return False
         return True
+
+    def __repr__(self):
+        return str(self._typeFigure)
