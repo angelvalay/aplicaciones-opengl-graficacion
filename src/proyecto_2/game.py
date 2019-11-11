@@ -5,7 +5,7 @@ FIG_LINEAL = 0 # |
 FIG_L = 1 # L
 FIG_S = 2 # S
 FIG_CUBE = 3 # []
-class wall:
+class Wall:
     width = 1 # anchura de la malla
     height = 1 # altura de la malla
     axis = 'X' # eje donde se hara la malla
@@ -69,7 +69,7 @@ class wall:
                 points.append([0, y, 0])
         return points
 
-class cube:
+class Cube:
     _centerX = 0
     _centerY = 0
     _centerZ = 0
@@ -151,7 +151,7 @@ class cube:
     def getPointToArray(self):
         return [self._centerX, self._centerY ,self._centerZ]
 
-    def faces(self, numberFace):
+    def Faces(self, numberFace):
         subPoints = []
         if numberFace == 1:
             subPoints.append(self._pointsCube[0])
@@ -185,23 +185,23 @@ class cube:
             subPoints.append(self._pointsCube[5])
         return subPoints
 
-class figure:
+class Figure:
     _cubes = []
     _typeFigure = []
     def __init__(self, typeFigure, posX, posY, posZ):
-        self._cubes.append(cube(posX, posY, posZ))
+        self._cubes.append(Cube(posX, posY, posZ))
         self._typeFigure = typeFigure
         if typeFigure == FIG_L:
-            self._cubes.append(cube(posX, posY, posZ - 1))
-            self._cubes.append(cube(posX, posY, posZ + 1))
-            self._cubes.append(cube(posX + 1, posY, posZ + 1))
+            self._cubes.append(Cube(posX, posY, posZ - 1))
+            self._cubes.append(Cube(posX, posY, posZ + 1))
+            self._cubes.append(Cube(posX + 1, posY, posZ + 1))
         elif typeFigure == FIG_LINEAL:
-            self._cubes.append(cube(posX, posY, posZ - 1))
-            self._cubes.append(cube(posX, posY, posZ + 1))
+            self._cubes.append(Cube(posX, posY, posZ - 1))
+            self._cubes.append(Cube(posX, posY, posZ + 1))
         elif typeFigure == FIG_S:
-            self._cubes.append(cube(posX - 1, posY, posZ))
-            self._cubes.append(cube(posX, posY, posZ + 1))
-            self._cubes.append(cube(posX + 1, posY, posZ + 1))
+            self._cubes.append(Cube(posX - 1, posY, posZ))
+            self._cubes.append(Cube(posX, posY, posZ + 1))
+            self._cubes.append(Cube(posX + 1, posY, posZ + 1))
 
     def moveX(self, posX):
         for cube in self._cubes:
@@ -230,7 +230,7 @@ class figure:
         # for figure in figures:
         #     for cubes in figure.cubes:
         for myCubes in self.cubes:
-            print(myCubes.getPointToArray())
+            # print(myCubes.getPointToArray())
             if (myCubes.centerX + posX) >= 3 or (myCubes.centerX + posX) < 0:
                 print('X sobre pasa del terreno')
                 return False

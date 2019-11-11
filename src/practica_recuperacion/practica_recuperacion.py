@@ -25,6 +25,7 @@ HEIGHT_FIG = 160
 SIZE_FIG_WIDTH = WIDTH_FIG/5
 SIZE_FIG_HEIGHT = HEIGHT_FIG/4
 
+pieces = []
 
 
 
@@ -69,10 +70,10 @@ class Pieze:
     pointStart = Point(0,0)
     def __init__(self, x, y):
         self.pointStart = Point(x, y)
+        self.points = []
+        self.pointsForTexture= []
 
     def generatePoints(self):
-        self.points[:] = []
-        self.pointsForTexture[:] = []
         for r in range(1,4):
             if r == 1 or r == 3 :
                 for n in numpy.arange(0, SIZE_FIG_HEIGHT + 1,1):
@@ -100,6 +101,7 @@ class Pieze:
                                                  self.pointStart.getY()/HEIGHT_FIG))
         print('antes ',len(self.points))
         print('antes ',len(self.pointsForTexture))
+
     def getPoints(self):
         return self.points
 
@@ -139,20 +141,13 @@ class Pieze:
     def __repr__(self):
         return str(self.pointStart.x)+ ' '+ str(self.pointStart.y)
 
-
-#pieza
-pieza = Pieze(0,0)
-pieza.generatePoints()
-
-pieces = []
-
 def buildPieces():
     global pieces
     for y in numpy.arange(0, HEIGHT_FIG, SIZE_FIG_HEIGHT):
         for x in numpy.arange(0, WIDTH_FIG, SIZE_FIG_WIDTH):
             piece = Pieze(x,y)
             piece.generatePoints()
-            # piece.translate(random.randint(-60, 60), random.randint(-30, 60))
+            piece.translate(random.randint(-60, 60), random.randint(-30, 60))
             pieces.append(piece)
             print (piece)
 
@@ -215,7 +210,7 @@ def drawPiecesFigure():
         p = piece.getPoints()
         for i in range(0,p.__len__()):
             # print(str(1-pieza.getPointForTexture(i).getX()),' ', str(1-pieza.getPointForTexture(i).getY()))
-            glTexCoord2f(1-pieza.getPointForTexture(i).getX(), (1-pieza.getPointForTexture(i).getY()))
+            glTexCoord2f(1-piece.getPointForTexture(i).getX(), (1-piece.getPointForTexture(i).getY()))
             glVertex3f(p[i].getX(), p[i].getY(),0)
         glEnd()
 

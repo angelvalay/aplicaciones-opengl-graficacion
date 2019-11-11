@@ -35,42 +35,40 @@ showMessageStart = 0
 refreshMillis = 500
 
 # Se crea una malla del eje Y
-wall1 = game.wall(3, 3, (-10, -10, 0), 'Y')
+wall1 = game.Wall(3, 3, (-10, -10, 0), 'Y')
 listPoints = wall1.getPoints()
 
 # Se crea una malla del eje Z
-wall2 = game.wall(3,10,(-10,-10,0),'Z')
+wall2 = game.Wall(3,10,(-10,-10,0),'Z')
 listPoints2 = wall2.getPoints()
 
 # Se crea una malla del eje X
-wall3 = game.wall(10,3,(-10,-10,0),'X')
+wall3 = game.Wall(10,3,(-10,-10,0),'X')
 listPoints3 = wall3.getPoints()
 
 # array de figuras
 # este array guarda las figuras que se van generando para asi mantener todo las figuras
 figures = []
 
-#se anade la figura de prueba a la lista
-figures.append(game.figure(random.randint(0,3),1,10,1))
-# print (figures)
 
 def timer(value):
     global refreshMillis, figures, showMessageStart
     # Si el juego ya empezo
     if showMessageStart == 1:
-        print('figura -> ', figures[-1])
-        for cube in figures[-1].cubes:
+        figure = figures[0]
+        print('figura -> ', figure)
+        for cube in figure.cubes:
             print(cube.getPointToArray())
-        if figures[-1].isValidateMove(0,-1,0):
+        if figure.isValidateMove(0,-1,0):
             print('puede bajar')
             # Refresca la pantalla
-            figures[-1].moveY(-1)
+            figure.moveY(-1)
             glutPostRedisplay()
         else:
             print('ya no se puede bajar')
-            figures=[]
+            # figures=[]
             # Se crea una figura de prueba
-            figures.append(game.figure(3, 1, 10, 1))
+            figures.insert(0,game.Figure(random.randint(0,3), 1, 10, 1))
             print(figures)
             showMessageStart = 0
             glutPostRedisplay()
@@ -198,13 +196,16 @@ def displayMe():
                 # dibuja el poligono
                 glBegin(GL_POLYGON)
                 # extrae los puntos
-                for point in cube.faces(face):
+                for point in cube.Faces(face):
                     glVertex3fv(point)
                 glEnd()
     glutSwapBuffers()
 
 # Funcion principal
 def main():
+    # se anade la figura de prueba a la lista
+    figures.append(game.Figure(random.randint(0, 3), 1, 10, 1))
+    print(figures)
     printInteraction()
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)
