@@ -50,13 +50,15 @@ listPoints3 = wall3.getPoints()
 # este array guarda las figuras que se van generando para asi mantener todo las figuras
 figures = []
 
+figure = game.Figure(random.randint(0,3), 1, 10, 1)
+
 
 def timer(value):
-    global refreshMillis, figures, showMessageStart
+    global refreshMillis, figures, showMessageStart, figure
     # Si el juego ya empezo
     if showMessageStart == 1:
-        figure = figures[0]
         print('figura -> ', figure)
+        # print('cubes ', figure.)
         for cube in figure.cubes:
             print(cube.getPointToArray())
         if figure.isValidateMove(0,-1,0):
@@ -67,9 +69,10 @@ def timer(value):
         else:
             print('ya no se puede bajar')
             # figures=[]
-            # Se crea una figura de prueba
-            figures.insert(0,game.Figure(random.randint(0,3), 1, 10, 1))
+            figures.append(figure)
+            figure = game.Figure(random.randint(0,3), 1, 10, 1)
             print(figures)
+            # Se crea una figura de prueba
             showMessageStart = 0
             glutPostRedisplay()
     glutTimerFunc(refreshMillis, timer, 0)
@@ -100,7 +103,7 @@ def drawTextOnDisplay(string):
 
 # FUncion para el keyinput
 def keyInput(key, x, y):
-    global zoom, zoom_x, zoom_y, zoom_z, showMessageStart
+    global zoom, zoom_x, zoom_y, zoom_z, showMessageStart, figure
     if key == b'\053':  # ESCAPE
         zoom = zoom  - 1
 
@@ -126,17 +129,17 @@ def keyInput(key, x, y):
             showMessageStart = 0
 
     if key == b'\062': # borrar es de prueba 2222
-        if figures[-1].isValidateMove(0, 0, 1):
-            figures[-1].moveZ(1)
+        if figure.isValidateMove(0, 0, 1):
+            figure.moveZ(1)
     if key == b'\070': # borrar es de prueba 8888
-        if figures[-1].isValidateMove(0, 0, -1):
-            figures[-1].moveZ(-1)
+        if figure.isValidateMove(0, 0, -1):
+            figure.moveZ(-1)
     if key == b'\064': # borrar es de prueba 4444
-        if figures[-1].isValidateMove(-1, 0, 0):
-            figures[-1].moveX(-1)
+        if figure.isValidateMove(-1, 0, 0):
+            figure.moveX(-1)
     if key == b'\066': # borrar es de prueba 6666
-        if figures[-1].isValidateMove(1, 0, 0):
-            figures[-1].moveX(1)
+        if figure.isValidateMove(1, 0, 0):
+            figure.moveX(1)
 
     glutPostRedisplay()
 
@@ -154,7 +157,7 @@ def displayText():
 
 # Display
 def displayMe():
-    global listPoints, zoom, zoom_x, zoom_y, zoom_z
+    global listPoints, zoom, zoom_x, zoom_y, zoom_z, figures
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
@@ -186,26 +189,24 @@ def displayMe():
     # coloquen bien
     glTranslatef(game.UNIT_CUBE/2,game.UNIT_CUBE/2,game.UNIT_CUBE/2)
     # se imprimen las figuras
-    for figure in  figures:
+    # for figure in  figures:
         # muestra la figura cubo x cubo
-        glColor(0.6, 0.6, 0.6)
-        for cube in figure.cubes:
-            # mostrar la cara del cubo cara x cara
-            for face in range(1,6,1):
-                # glPointSize(5)
-                # dibuja el poligono
-                glBegin(GL_POLYGON)
-                # extrae los puntos
-                for point in cube.Faces(face):
-                    glVertex3fv(point)
-                glEnd()
+    glColor(0.6, 0.6, 0.6)
+    for cube in figure.cubes:
+        # mostrar la cara del cubo cara x cara
+        for face in range(1,6,1):
+            # glPointSize(5)
+            # dibuja el poligono
+            glBegin(GL_POLYGON)
+            # extrae los puntos
+            for point in cube.Faces(face):
+                glVertex3fv(point)
+            glEnd()
     glutSwapBuffers()
 
 # Funcion principal
 def main():
     # se anade la figura de prueba a la lista
-    figures.append(game.Figure(random.randint(0, 3), 1, 10, 1))
-    print(figures)
     printInteraction()
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB)

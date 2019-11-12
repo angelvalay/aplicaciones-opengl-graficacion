@@ -243,4 +243,4 @@ class Figure:
         return True
 
     def __repr__(self):
-        return str(self._typeFigure)
+        return str(self._cubes)

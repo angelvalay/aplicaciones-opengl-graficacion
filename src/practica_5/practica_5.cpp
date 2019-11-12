@@ -1,3 +1,6 @@
+/**
+ * ANGEL ARMANDO VALAY MARTINEZ
+ */
 // LIBRERIAS DEL OPEN GL Y DE ESTANDAR
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +24,7 @@ static int animationPeriod = 100; // Time interval between fram
 // Light property vectors.
 float lightAmb[] = { 0.0, 0.0, 0.0, 1.0 };
 float lightDifAndSpec0[] = { 1.0, 1.0, 1.0, 1.0 };
-float lightPos0[] = { 0.0, -150.0, 1500, 1.0 };
+float lightPos0[] = { 200.0, 200.0, -1500, 1.0 };
 float globAmb[] = { 0.2, 0.2, 0.2, 1.0 };
 
 // Material
@@ -330,7 +333,7 @@ int main(int argc, char **argv)
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
     glutInitWindowSize(SIZE, SIZE);
     glutInitWindowPosition(200, 200);
-    glutCreateWindow("Shadowy Leapin' Lizards");
+    glutCreateWindow("Practica 5 | Modelado 3D con iluminacion, sombreado ...");
     glutDisplayFunc(drawScene);
     glutKeyboardFunc(key);
     glutReshapeFunc(reshape);
