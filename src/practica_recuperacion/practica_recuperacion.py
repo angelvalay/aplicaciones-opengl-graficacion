@@ -33,13 +33,11 @@ class Orientation(Enum):
     VERTICAL = 1
     HORIZONTAL = 2
 
-
 class Position(Enum):
     TOP = 1
     BOTTOM = 2
     LEFT = 3
     RIGHT = 4
-
 
 class Point:
     x = 0
@@ -61,7 +59,6 @@ class Point:
     def getPoint(self):
         return [self.x, self.y, 0]
 
-
 class Pieze:
     orientation = 0
     position = 0
@@ -71,7 +68,7 @@ class Pieze:
     translateX = 0
     translateY = 0
     setCurve = []
-    def __init__(self, x, y):
+    def __init__(self, x, y, left, top, right, bottom):
         self.pointStart = Point(x, y)
         self.points = []
         self.pointsForTexture= []
@@ -81,34 +78,139 @@ class Pieze:
         # -1 -> Lineal
         # 0 -> to Down (hacia dentro)
         # 1 -> to Up (hacia fuera)
-        self.setCurve= [-1,-1,-1,-1]
+        self.setCurve= [left,top,right,bottom]
 
     def generatePoints(self):
+        self.points[:] = []
+        self.pointsForTexture[:] = []
         for r in range(1,5):
             if r == 1 or r == 3 :
-                for n in numpy.arange(0, SIZE_FIG_HEIGHT + 1,1):
+                for n in numpy.arange(0, SIZE_FIG_HEIGHT + 0.01,0.01):
                     if r == 1: #LEFT
-                        self.points.append(Point(self.pointStart.getX(),
-                                                 self.pointStart.getY() + n))
-                        self.pointsForTexture.append(Point(self.pointStart.getX()/WIDTH_FIG,
-                                                    (self.pointStart.getY() + n)/HEIGHT_FIG))
+                        if self.setCurve[r-1] == -1:
+                            self.points.append(Point(self.pointStart.getX(),
+                                                     self.pointStart.getY() + n))
+                            self.pointsForTexture.append(Point(self.pointStart.getX()/WIDTH_FIG,
+                                                        (self.pointStart.getY() + n)/HEIGHT_FIG))
+                        elif self.setCurve[r-1] == 0: # curva hacia derecha
+                            if (n/SIZE_FIG_HEIGHT)>0.28 and (n/SIZE_FIG_HEIGHT)<0.73:
+                                #glVertex2d(getXInside((n/SIZE_FIG_HEIGHT)) * SIZE_FIG_WIDTH, (n/SIZE_FIG_HEIGHT) * SIZE_FIG_HEIGHT)
+                                self.points.append(Point((self.pointStart.getX() + getXInside(n/SIZE_FIG_HEIGHT)*SIZE_FIG_WIDTH),
+                                                         self.pointStart.getY() + n))
+                                self.pointsForTexture.append(Point(((self.pointStart.getX() + getXInside(n/SIZE_FIG_HEIGHT)*SIZE_FIG_WIDTH) / WIDTH_FIG),
+                                                                   (self.pointStart.getY() + n) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point(self.pointStart.getX(),
+                                                         self.pointStart.getY() + n))
+                                self.pointsForTexture.append(Point(self.pointStart.getX() / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + n) / HEIGHT_FIG))
+                        elif self.setCurve[r - 1] == 1: #curva hacia izquierda
+                            if (n / SIZE_FIG_HEIGHT) > 0.28 and (n / SIZE_FIG_HEIGHT) < 0.73:
+                                self.points.append(
+                                    Point((self.pointStart.getX() + getXOutside(n / SIZE_FIG_HEIGHT) * SIZE_FIG_WIDTH),
+                                          self.pointStart.getY() + n))
+                                self.pointsForTexture.append(Point(((self.pointStart.getX() + getXOutside(
+                                    n / SIZE_FIG_HEIGHT) * SIZE_FIG_WIDTH) / WIDTH_FIG),
+                                                                   (self.pointStart.getY() + n) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point(self.pointStart.getX(),
+                                                         self.pointStart.getY() + n))
+                                self.pointsForTexture.append(Point(self.pointStart.getX() / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + n) / HEIGHT_FIG))
                     elif r == 3: #RIGHT
-                        self.points.append(Point(self.pointStart.getX() + SIZE_FIG_WIDTH,
-                                                 (self.pointStart.getY() + SIZE_FIG_HEIGHT) - n))
-                        self.pointsForTexture.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH)/WIDTH_FIG,
-                                                 ((self.pointStart.getY()+ SIZE_FIG_HEIGHT) - n)/HEIGHT_FIG))
+                        if self.setCurve[r - 1] == -1:
+                            self.points.append(Point(self.pointStart.getX() + SIZE_FIG_WIDTH,
+                                                     (self.pointStart.getY() + SIZE_FIG_HEIGHT) - n))
+                            self.pointsForTexture.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH)/WIDTH_FIG,
+                                                     ((self.pointStart.getY()+ SIZE_FIG_HEIGHT) - n)/HEIGHT_FIG))
+                        elif self.setCurve[r - 1] == 0:
+                            if (n / SIZE_FIG_HEIGHT) > 0.28 and (n / SIZE_FIG_HEIGHT) < 0.73:
+                                self.points.append(
+                                    Point(self.pointStart.getX() + SIZE_FIG_WIDTH + getXOutside(n / SIZE_FIG_HEIGHT) * SIZE_FIG_WIDTH,
+                                                         (self.pointStart.getY() + SIZE_FIG_HEIGHT) - n))
+                                self.pointsForTexture.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH)/WIDTH_FIG,
+                                                         ((self.pointStart.getY()+ SIZE_FIG_HEIGHT) - n)/HEIGHT_FIG))
+                            else:
+                                self.points.append(Point(self.pointStart.getX() + SIZE_FIG_WIDTH,
+                                                         (self.pointStart.getY() + SIZE_FIG_HEIGHT) - n))
+                                self.pointsForTexture.append(
+                                    Point((self.pointStart.getX() + SIZE_FIG_WIDTH) / WIDTH_FIG,
+                                          ((self.pointStart.getY() + SIZE_FIG_HEIGHT) - n) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == 1:
+                            if (n / SIZE_FIG_HEIGHT) > 0.28 and (n / SIZE_FIG_HEIGHT) < 0.73:
+                                self.points.append(
+                                    Point(self.pointStart.getX() + SIZE_FIG_WIDTH + getXInside(n / SIZE_FIG_HEIGHT) * SIZE_FIG_WIDTH,
+                                          (self.pointStart.getY() + SIZE_FIG_HEIGHT) - n))
+                                self.pointsForTexture.append(
+                                    Point((self.pointStart.getX() + SIZE_FIG_WIDTH) / WIDTH_FIG,
+                                          ((self.pointStart.getY() + SIZE_FIG_HEIGHT) - n) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point(self.pointStart.getX() + SIZE_FIG_WIDTH,
+                                                         (self.pointStart.getY() + SIZE_FIG_HEIGHT) - n))
+                                self.pointsForTexture.append(
+                                    Point((self.pointStart.getX() + SIZE_FIG_WIDTH) / WIDTH_FIG,
+                                          ((self.pointStart.getY() + SIZE_FIG_HEIGHT) - n) / HEIGHT_FIG))
             else:
-                for n in numpy.arange(0,SIZE_FIG_WIDTH+1,1):
+                for n in numpy.arange(0,SIZE_FIG_WIDTH+0.01,0.01):
                     if r == 2: #TOP
-                        self.points.append(Point(self.pointStart.getX() + n,
-                                                 self.pointStart.getY() + SIZE_FIG_HEIGHT))
-                        self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
-                                                           (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == -1:
+                            self.points.append(Point(self.pointStart.getX() + n,
+                                                     self.pointStart.getY() + SIZE_FIG_HEIGHT))
+                            self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
+                                                               (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == 0:
+                            if (n / SIZE_FIG_WIDTH) > 0.28 and (n / SIZE_FIG_WIDTH) < 0.73:
+                                self.points.append(Point(self.pointStart.getX() + n,
+                                                         self.pointStart.getY() + getYOutside(n/SIZE_FIG_WIDTH)*SIZE_FIG_HEIGHT + SIZE_FIG_HEIGHT))
+                                self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + SIZE_FIG_HEIGHT + getYOutside(n/SIZE_FIG_WIDTH)*SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point(self.pointStart.getX() + n,
+                                                         self.pointStart.getY() + SIZE_FIG_HEIGHT))
+                                self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == 1:
+                            if (n / SIZE_FIG_WIDTH) > 0.28 and (n / SIZE_FIG_WIDTH) < 0.73:
+                                self.points.append(Point(self.pointStart.getX() + n,
+                                                         self.pointStart.getY() + getYInside(n / SIZE_FIG_WIDTH) * SIZE_FIG_HEIGHT + SIZE_FIG_HEIGHT))
+                                self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + SIZE_FIG_HEIGHT + getYInside(
+                                                                           n / SIZE_FIG_WIDTH) * SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point(self.pointStart.getX() + n,
+                                                         self.pointStart.getY() + SIZE_FIG_HEIGHT))
+                                self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
                     elif r == 4: # BOTTOM
-                        self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) - n,
-                                                 self.pointStart.getY()))
-                        self.pointsForTexture.append(Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
-                                                           (self.pointStart.getY()) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == -1:
+                            self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) - n,
+                                                     self.pointStart.getY()))
+                            self.pointsForTexture.append(Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
+                                                               (self.pointStart.getY()) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == 0:
+                            if (n / SIZE_FIG_WIDTH) > 0.28 and (n / SIZE_FIG_WIDTH) < 0.73:
+                                self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) - n,
+                                                         self.pointStart.getY()  + getYInside(n/SIZE_FIG_WIDTH)*SIZE_FIG_HEIGHT))
+                                self.pointsForTexture.append(Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
+                                                                   (self.pointStart.getY() + getYInside(n/SIZE_FIG_WIDTH)*SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) - n,
+                                                         self.pointStart.getY()))
+                                self.pointsForTexture.append(
+                                    Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
+                                          (self.pointStart.getY()) / HEIGHT_FIG))
+                        if self.setCurve[r - 1] == 1:
+                            if (n / SIZE_FIG_WIDTH) > 0.28 and (n / SIZE_FIG_WIDTH) < 0.73:
+                                self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) - n,
+                                                         self.pointStart.getY() +  getYOutside(n/SIZE_FIG_WIDTH)*SIZE_FIG_HEIGHT))
+                                self.pointsForTexture.append(Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
+                                                                    (self.pointStart.getY() + getYOutside(n/SIZE_FIG_WIDTH)*SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                            else:
+                                self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) - n,
+                                                         self.pointStart.getY()))
+                                self.pointsForTexture.append(
+                                    Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
+                                          (self.pointStart.getY()) / HEIGHT_FIG))
 
 
     def getPoints(self):
@@ -145,37 +247,91 @@ class Pieze:
                                                                         self.pointStart.getY() + SIZE_FIG_HEIGHT) - n) / HEIGHT_FIG))
             else:
                 for n in numpy.arange(0, SIZE_FIG_WIDTH + 1, 1):
-                    if r == 2:
+                    if r == 2:  # TOP
                         self.points.append(Point(self.pointStart.getX() + n + self.translateX,
                                                  self.pointStart.getY() + SIZE_FIG_HEIGHT + self.translateY))
                         self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
                                                            (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
-                    elif r == 4:
-                        self.pointsForTexture.append(Point(((self.pointStart.getX() + self.translateX + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
-                                                           (self.pointStart.getY()+self.translateY) / HEIGHT_FIG))
+                    elif r == 4:  # BOTTOM
+                        self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH + self.translateX) - n,
+                                                 self.pointStart.getY() + self.translateY))
                         self.pointsForTexture.append(Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
-                                                           (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
+                                                           (self.pointStart.getY()) / HEIGHT_FIG))
 
         # print('des ', len(self.points))
         # print('des ', len(self.pointsForTexture))
     def __repr__(self):
         return str(self.pointStart.x)+ ' '+ str(self.pointStart.y)
 
+def getYOutside(x):
+    """
+    Funcion para generar una parabola con el embone hacia abajo \/
+    :param x: valor de x
+    :return: valor de y
+    """
+    return 5*(x**2) - 5*x + 1
+
+def getYInside(x):
+    """
+    Funcion para generar una parabola con el embone hacia arriba ^
+    :param x: valor de x
+    :return: valor de y
+    """
+    return -5*(x**2) + 5*x - 1
+
+def getXInside(y):
+    """
+    Funcion para generar una parabola con el embone hacia la derecha >
+    :param y: valor de y
+    :return: valor de x
+    """
+    return -5*(y**2) + 5*y - 1
+
+def getXOutside(y):
+    """
+    Funcion para generar una parabola con el embone hacia la izquierda <
+    :param y: valor de y
+    :return: valor de x
+    """
+    return 5*(y**2) - 5*y + 1
+
 def buildPieces():
     global pieces
-    figY = 0
-    for y in numpy.arange(0, HEIGHT_FIG, SIZE_FIG_HEIGHT):
-        figX = 0
-        for x in numpy.arange(0, WIDTH_FIG, SIZE_FIG_WIDTH):
-            piece = Pieze(x,y)
-            piece.generatePoints()
-            # piece.translate(0, 0)
-            pieces.append(piece)
-            print(str(figX),' ', str(figY))
-            if x == 0 and y == x:
-                print('')
-            figX += 1
-        figY += 1
+    # figY = 0
+    # for y in numpy.arange(0, HEIGHT_FIG, SIZE_FIG_HEIGHT):
+    #     figX = 0
+    #     for x in numpy.arange(0, WIDTH_FIG, SIZE_FIG_WIDTH):
+    # piece.translate(0, 0)
+    pieces.append(Pieze(0, 0, -1, 0, 1, -1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, 0, 0, 0, 0, -1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, 0, 1, 0, 1, -1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, 0, 0, 1, 0, -1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, 0, 1, 0, -1, -1))
+
+    pieces.append(Pieze(0, SIZE_FIG_WIDTH, -1, 1, 0, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH, 1, 0, 1, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, SIZE_FIG_WIDTH, 0, 1, 0, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, SIZE_FIG_WIDTH, 1, 0, 1, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH, 0, 1, -1, 1))
+
+    pieces.append(Pieze(0, SIZE_FIG_WIDTH*2, -1, 0, 1, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH*2, 0, 0, 0, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, SIZE_FIG_WIDTH*2, 1, 0, 1, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, SIZE_FIG_WIDTH*2, 0, 1, 0, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH*2, 1, 0, -1, 1))
+
+    pieces.append(Pieze(0, SIZE_FIG_WIDTH * 3, -1, -1, 1, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH * 3, 0, -1, 0, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, SIZE_FIG_WIDTH * 3, 1, -1, 1, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, SIZE_FIG_WIDTH * 3, 0, -1, 0, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH * 3, 1, -1, -1, 1))
+    for piece in pieces:
+        piece.generatePoints()
+    # print(str(figX),' ', str(figY))
+    #         if x == 0 and y == 0:
+    #             print(str(x),' ', str(y))
+        #     figX += 1
+        # figY += 1
 
 
 def drawTextOnPosition2D(x, y, text):
@@ -195,10 +351,10 @@ def drawOriginalFigure():
     """
 
     # anadir linea vertical
-    glBegin(GL_LINES)
-    glVertex3f(0, -40, 0)
-    glVertex3f(0, 220, 0)
-    glEnd()
+    # glBegin(GL_LINES)
+    # glVertex3f(0, -40, 0)
+    # glVertex3f(0, 220, 0)
+    # glEnd()
 
     # generar cuadro izquierdo
     glEnable(GL_TEXTURE_2D)
@@ -226,27 +382,43 @@ def drawPiecesFigure():
     for piece in pieces:
         #si la pieza que se intenta dibujar es la seleccionada
         # no se dibuja al inicio
+        # if piece != pieces[selected]:
+        glBegin(GL_POLYGON)
+        p = piece.getPoints()
+        for i in range(0,p.__len__()):
+            glTexCoord2f(1-piece.getPointForTexture(i).getX(), (1-piece.getPointForTexture(i).getY()))
+            glVertex3f(p[i].getX(), p[i].getY(),0)
+        glEnd()
+    glDisable(GL_TEXTURE_2D)
+    # aqui pinto los bordes de cada pieza en la pantalla
+    for piece in pieces:
+        # si la pieza que se intenta dibujar es la seleccionada
         if piece != pieces[selected]:
-            glBegin(GL_POLYGON)
+            glBegin(GL_LINES)
             p = piece.getPoints()
-            for i in range(0,p.__len__()):
-                glTexCoord2f(1-piece.getPointForTexture(i).getX(), (1-piece.getPointForTexture(i).getY()))
-                glVertex3f(p[i].getX(), p[i].getY(),0)
+            for i in range(0, p.__len__()):
+                glVertex3f(p[i].getX(), p[i].getY(), 0)
             glEnd()
-    # dibuja la textura del objecto seleccionado
+
+    # dibuja la linea que sobresale de la pieza seleccionada
+    glPointSize(2)
+    glBegin(GL_POINTS)
+    p = pieces[selected].getPoints()
+    for i in range(0, p.__len__()):
+        glVertex3f(p[i].getX(), p[i].getY(), 0)
+    glEnd()
+    #dibuja la textura
+    glEnable(GL_TEXTURE_2D)
+    glBindTexture(GL_TEXTURE_2D, texture_id)
+    #dibuja la textura del objecto seleccionado
     glBegin(GL_POLYGON)
     p = pieces[selected].getPoints()
     for i in range(0, p.__len__()):
-        glTexCoord2f(1 - pieces[selected].getPointForTexture(i).getX(), (1 - pieces[selected].getPointForTexture(i).getY()))
+        glTexCoord3f(1 -pieces[selected].getPointForTexture(i).getX(),
+                     (1 - pieces[selected].getPointForTexture(i).getY()),0)
         glVertex3f(p[i].getX(), p[i].getY(), 0)
     glEnd()
     glDisable(GL_TEXTURE_2D)
-    # dibuja la linea que sobresale de la pieza
-    glBegin(GL_LINE_LOOP)
-    p = pieces[selected].getPoints()
-    for i in range(0, p.__len__()):
-        glVertex3f(p[i].getX(), p[i].getY(), 0)
-    glEnd()
 
 def drawMenu():
     """
@@ -357,7 +529,7 @@ def displayMe():
     drawMenu()
     drawOriginalFigure()
     drawPiecesFigure()
-    glFlush()
+    glutSwapBuffers()
 
 
 def readTexture(filename):
