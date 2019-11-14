@@ -1,5 +1,5 @@
 # Ejecucion:
-# python3 practica_recuperacion nombre_archivo
+# python3 practica_recuperacion
 
 from OpenGL.GLUT import *  # GL Utilities Toolkit
 from OpenGL.GL import *
@@ -11,7 +11,7 @@ from PIL import Image
 import numpy
 from enum import Enum
 
-# VAlores iniciales
+# Valores iniciales
 AlturaVentana = 375
 AnchuraVentana = 1000
 
@@ -59,6 +59,10 @@ class Point:
     def getPoint(self):
         return [self.x, self.y, 0]
 
+    def setTranslate(self,x,y):
+        self.x+= x
+        self.y+= y
+
 class Pieze:
     orientation = 0
     position = 0
@@ -85,7 +89,7 @@ class Pieze:
         self.pointsForTexture[:] = []
         for r in range(1,5):
             if r == 1 or r == 3 :
-                for n in numpy.arange(0, SIZE_FIG_HEIGHT + 0.01,0.01):
+                for n in numpy.arange(0, SIZE_FIG_HEIGHT-0.5,0.5):
                     if r == 1: #LEFT
                         if self.setCurve[r-1] == -1:
                             self.points.append(Point(self.pointStart.getX(),
@@ -151,7 +155,7 @@ class Pieze:
                                     Point((self.pointStart.getX() + SIZE_FIG_WIDTH) / WIDTH_FIG,
                                           ((self.pointStart.getY() + SIZE_FIG_HEIGHT) - n) / HEIGHT_FIG))
             else:
-                for n in numpy.arange(0,SIZE_FIG_WIDTH+0.01,0.01):
+                for n in numpy.arange(0,SIZE_FIG_WIDTH-0.5,0.5):
                     if r == 2: #TOP
                         if self.setCurve[r - 1] == -1:
                             self.points.append(Point(self.pointStart.getX() + n,
@@ -229,37 +233,10 @@ class Pieze:
     def translate(self,x,y):
         self.translateX = self.translateX + x
         self.translateY = self.translateY + y
-        self.points[:] = []
-        self.pointsForTexture[:] = []
-        for r in range(1, 5):
-            if r == 1 or r == 3:
-                for n in numpy.arange(0, SIZE_FIG_HEIGHT + 1, 1):
-                    if r == 1:
-                        self.points.append(Point(self.pointStart.getX() + self.translateX,
-                                                 self.pointStart.getY() + n + self.translateY))
-                        self.pointsForTexture.append(Point(self.pointStart.getX() / WIDTH_FIG,
-                                                           (self.pointStart.getY() + n) / HEIGHT_FIG))
-                    elif r == 3:
-                        self.points.append(Point(self.pointStart.getX() + SIZE_FIG_WIDTH + self.translateX,
-                                                 (self.pointStart.getY() + SIZE_FIG_HEIGHT + self.translateY) - n))
-                        self.pointsForTexture.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH) / WIDTH_FIG,
-                                                           ((
-                                                                        self.pointStart.getY() + SIZE_FIG_HEIGHT) - n) / HEIGHT_FIG))
-            else:
-                for n in numpy.arange(0, SIZE_FIG_WIDTH + 1, 1):
-                    if r == 2:  # TOP
-                        self.points.append(Point(self.pointStart.getX() + n + self.translateX,
-                                                 self.pointStart.getY() + SIZE_FIG_HEIGHT + self.translateY))
-                        self.pointsForTexture.append(Point((self.pointStart.getX() + n) / WIDTH_FIG,
-                                                           (self.pointStart.getY() + SIZE_FIG_HEIGHT) / HEIGHT_FIG))
-                    elif r == 4:  # BOTTOM
-                        self.points.append(Point((self.pointStart.getX() + SIZE_FIG_WIDTH + self.translateX) - n,
-                                                 self.pointStart.getY() + self.translateY))
-                        self.pointsForTexture.append(Point(((self.pointStart.getX() + SIZE_FIG_WIDTH) - n) / WIDTH_FIG,
-                                                           (self.pointStart.getY()) / HEIGHT_FIG))
-
-        # print('des ', len(self.points))
-        # print('des ', len(self.pointsForTexture))
+        # self.points[:] = []
+        # self.pointsForTexture[:] = []
+        for point in self.points:
+            point.setTranslate(x, y)
     def __repr__(self):
         return str(self.pointStart.x)+ ' '+ str(self.pointStart.y)
 
@@ -297,28 +274,23 @@ def getXOutside(y):
 
 def buildPieces():
     global pieces
-    # figY = 0
-    # for y in numpy.arange(0, HEIGHT_FIG, SIZE_FIG_HEIGHT):
-    #     figX = 0
-    #     for x in numpy.arange(0, WIDTH_FIG, SIZE_FIG_WIDTH):
-    # piece.translate(0, 0)
     pieces.append(Pieze(0, 0, -1, 0, 1, -1))
-    pieces.append(Pieze(SIZE_FIG_HEIGHT, 0, 0, 0, 0, -1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, 0, 0, 1, 0, -1))
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, 0, 1, 0, 1, -1))
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, 0, 0, 1, 0, -1))
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, 0, 1, 0, -1, -1))
 
     pieces.append(Pieze(0, SIZE_FIG_WIDTH, -1, 1, 0, 1))
-    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH, 1, 0, 1, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH, 1, 0, 1, 0))
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, SIZE_FIG_WIDTH, 0, 1, 0, 1))
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, SIZE_FIG_WIDTH, 1, 0, 1, 0))
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH, 0, 1, -1, 1))
 
-    pieces.append(Pieze(0, SIZE_FIG_WIDTH*2, -1, 0, 1, 1))
-    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH*2, 0, 0, 0, 0))
-    pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, SIZE_FIG_WIDTH*2, 1, 0, 1, 1))
-    pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, SIZE_FIG_WIDTH*2, 0, 1, 0, 0))
-    pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH*2, 1, 0, -1, 1))
+    pieces.append(Pieze(0, SIZE_FIG_WIDTH*2, -1, 0, 1, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH*2, 0, 1, 0, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 2, SIZE_FIG_WIDTH*2, 1, 0, 1, 0))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 3, SIZE_FIG_WIDTH*2, 0, 1, 0, 1))
+    pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH*2, 1, 0, -1, 0))
 
     pieces.append(Pieze(0, SIZE_FIG_WIDTH * 3, -1, -1, 1, 1))
     pieces.append(Pieze(SIZE_FIG_HEIGHT, SIZE_FIG_WIDTH * 3, 0, -1, 0, 0))
@@ -327,11 +299,7 @@ def buildPieces():
     pieces.append(Pieze(SIZE_FIG_HEIGHT * 4, SIZE_FIG_WIDTH * 3, 1, -1, -1, 1))
     for piece in pieces:
         piece.generatePoints()
-    # print(str(figX),' ', str(figY))
-    #         if x == 0 and y == 0:
-    #             print(str(x),' ', str(y))
-        #     figX += 1
-        # figY += 1
+        piece.translate(random.randint(-70,70),random.randint(-70,70))
 
 
 def drawTextOnPosition2D(x, y, text):
@@ -351,10 +319,10 @@ def drawOriginalFigure():
     """
 
     # anadir linea vertical
-    # glBegin(GL_LINES)
-    # glVertex3f(0, -40, 0)
-    # glVertex3f(0, 220, 0)
-    # glEnd()
+    glBegin(GL_LINES)
+    glVertex3f(0, -40, 0)
+    glVertex3f(0, 220, 0)
+    glEnd()
 
     # generar cuadro izquierdo
     glEnable(GL_TEXTURE_2D)
@@ -382,13 +350,13 @@ def drawPiecesFigure():
     for piece in pieces:
         #si la pieza que se intenta dibujar es la seleccionada
         # no se dibuja al inicio
-        # if piece != pieces[selected]:
-        glBegin(GL_POLYGON)
-        p = piece.getPoints()
-        for i in range(0,p.__len__()):
-            glTexCoord2f(1-piece.getPointForTexture(i).getX(), (1-piece.getPointForTexture(i).getY()))
-            glVertex3f(p[i].getX(), p[i].getY(),0)
-        glEnd()
+        if piece != pieces[selected]:
+            glBegin(GL_POLYGON)
+            p = piece.getPoints()
+            for i in range(0,p.__len__()):
+                glTexCoord2f(1-piece.getPointForTexture(i).getX(), (1-piece.getPointForTexture(i).getY()))
+                glVertex3f(p[i].getX(), p[i].getY(),0)
+            glEnd()
     glDisable(GL_TEXTURE_2D)
     # aqui pinto los bordes de cada pieza en la pantalla
     for piece in pieces:
@@ -400,13 +368,6 @@ def drawPiecesFigure():
                 glVertex3f(p[i].getX(), p[i].getY(), 0)
             glEnd()
 
-    # dibuja la linea que sobresale de la pieza seleccionada
-    glPointSize(2)
-    glBegin(GL_POINTS)
-    p = pieces[selected].getPoints()
-    for i in range(0, p.__len__()):
-        glVertex3f(p[i].getX(), p[i].getY(), 0)
-    glEnd()
     #dibuja la textura
     glEnable(GL_TEXTURE_2D)
     glBindTexture(GL_TEXTURE_2D, texture_id)
@@ -420,13 +381,21 @@ def drawPiecesFigure():
     glEnd()
     glDisable(GL_TEXTURE_2D)
 
+    # dibuja la linea que sobresale de la pieza seleccionada
+    glPointSize(4)
+    glBegin(GL_POINTS)
+    p = pieces[selected].getPoints()
+    for i in range(0, p.__len__()):
+        glVertex3f(p[i].getX(), p[i].getY(), 0)
+    glEnd()
+
 def drawMenu():
     """
     Funcion para dibujar el texto en la pantalla(MENU)
     """
     glColor3f(0, 0, 0)
     drawTextOnPosition2D(-180, -20, 'Imagen original')
-    drawTextOnPosition2D(-240, 180, 'SPACE para cambiar la figura')
+    drawTextOnPosition2D(-240, 180, 'ESPACIO para cambiar la figura')
     drawTextOnPosition2D(-240, 170, 'FLECHAS para mover la figura')
     drawTextOnPosition2D(100, -20, 'Rompecabezas')
 
@@ -445,8 +414,10 @@ def printInteraction():
     """
     print("Interaction:")
     print("Press [SPACE] to move selected object.")
-    print("Press ARROW LEFT/RIGHT/TOP/BOTTOM to finish.")
+    print("Press [ARROW] LEFT/RIGHT/TOP/BOTTOM to move object.")
     print("Press [ESCAPE] to finish.")
+    print("From to: Angel Armando Valay Martinez.")
+    print("Practica de recuperacion | Rompecabezas.")
 
 
 def init():

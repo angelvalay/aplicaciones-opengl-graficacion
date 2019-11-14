@@ -187,10 +187,8 @@ class Cube:
 
 class Figure:
     _cubes = []
-    _typeFigure = []
     def __init__(self, typeFigure, posX, posY, posZ):
         self._cubes.append(Cube(posX, posY, posZ))
-        self._typeFigure = typeFigure
         if typeFigure == FIG_L:
             self._cubes.append(Cube(posX, posY, posZ - 1))
             self._cubes.append(Cube(posX, posY, posZ + 1))
