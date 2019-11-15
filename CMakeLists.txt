@@ -10,9 +10,12 @@ add_executable(practicas-graficacion
 #        src/proyecto_1/juego_1.cpp)
 #        src/practica_4/practica_4.cpp)
 #        src/practica_rompecabezas.cpp)
-        src/practica_5/practica_5.cpp)
+#        src/practica_5/practica_5.cpp)
 #        src/practica_recuperacion/cplusplus/getbmp.h
 #        src/practica_recuperacion/cplusplus/getbmp.cpp
 #        src/practica_recuperacion/cplusplus/practica_recuperacion.cpp)
+        src/proyecto_2/matrix.h
+        src/proyecto_2/game.h
+        src/proyecto_2/proyecto_2.cpp)
 #src/practica_pelotas.cpp)
 target_link_libraries(practicas-graficacion ${OpenGlLinkers})
