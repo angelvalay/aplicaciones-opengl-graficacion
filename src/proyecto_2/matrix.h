@@ -19,7 +19,7 @@ float matrizRotationZ[4][4] ={
  * Matrix for rotate 90 grades on X
  */
 float matrizRotationX[4][4] ={
-        {1,             -1,             0,0},
+        {1,             0,             0,0},
         {1,             0/*cos90*/,     -1/*-sen90*/,0},
         {0,             1/*sen90*/,     0 /*-cos90*/,0},
         {0,             0,              0,1}
@@ -36,47 +36,62 @@ float matrizRotationY[4][4] ={
 };
 
 
-void rotationX(float* values);
-void rotationY(float *values);
-void rotationZ(float *values);
+void rotationX(float *valueX,float *valueY, float *valueZ);
+void rotationY(float *valueX,float *valueY, float *valueZ);
+void rotationZ(float *valueX,float *valueY, float *valueZ);
 
-void rotationX(float *values) {
-    auto* newValues = new float[3];
-    for (int i = 0; i < 3; ++i) {
-        float acum = 0;
-        for (int k = 0; k < 3; ++k) {
-            acum+= matrizRotationX[i][k]*values[k];
-        }
-        newValues[i] = acum;
-    }
-    std::cout<<" "<<newValues[0]<<" "<<newValues[1]<<" "<<newValues[2]<<" "<<std::endl;
-//    *values = *newValues;
+void rotationX(float *valueX,float *valueY, float *valueZ) {
+    float auxX = 0;
+    auxX+= matrizRotationX[0][0]*(*valueX);
+    auxX+= matrizRotationX[0][1]*(*valueY);
+    auxX+= matrizRotationX[0][2]*(*valueZ);
+    float auxY = 0;
+    auxY+= matrizRotationX[1][0]*(*valueX);
+    auxY+= matrizRotationX[1][1]*(*valueY);
+    auxY+= matrizRotationX[1][2]*(*valueZ);
+    float auxZ = 0;
+    auxZ+= matrizRotationX[2][0]*(*valueX);
+    auxZ+= matrizRotationX[2][1]*(*valueY);
+    auxZ+= matrizRotationX[2][2]*(*valueZ);
+    *valueX = auxX;
+    *valueY = auxY;
+    *valueZ = auxZ;
 }
 
-void rotationY(float *values) {
-    auto* newValues = new float[3];
-    for (int i = 0; i < 3; ++i) {
-        float acum = 0;
-        for (int k = 0; k < 3; ++k) {
-            acum+= matrizRotationY[i][k]*values[k];
-            std::cout<<" "<<acum<<" ";
-        }
-        std::cout<<std::endl;
-        newValues[i] = acum;
-    }
-//    *values = *newValues;
+void rotationY(float *valueX,float *valueY, float *valueZ) {
+    float auxX = 0;
+    auxX+= matrizRotationY[0][0]*(*valueX);
+    auxX+= matrizRotationY[0][1]*(*valueY);
+    auxX+= matrizRotationY[0][2]*(*valueZ);
+    float auxY = 0;
+    auxY+= matrizRotationY[1][0]*(*valueX);
+    auxY+= matrizRotationY[1][1]*(*valueY);
+    auxY+= matrizRotationY[1][2]*(*valueZ);
+    float auxZ = 0;
+    auxZ+= matrizRotationY[2][0]*(*valueX);
+    auxZ+= matrizRotationY[2][1]*(*valueY);
+    auxZ+= matrizRotationY[2][2]*(*valueZ);
+    *valueX = auxX;
+    *valueY = auxY;
+    *valueZ = auxZ;
 }
 
-void rotationZ(float *values) {
-    auto* newValues = new float[3];
-    for (int i = 0; i < 3; ++i) {
-        float acum = 0;
-        for (int k = 0; k < 3; ++k) {
-            acum+= matrizRotationZ[i][k]*values[k];
-        }
-        newValues[i] = acum;
-    }
-    //    *values = *newValues;
+void rotationZ(float *valueX,float *valueY, float *valueZ) {
+    float auxX = 0;
+    auxX+= matrizRotationZ[0][0]*(*valueX);
+    auxX+= matrizRotationZ[0][1]*(*valueY);
+    auxX+= matrizRotationZ[0][2]*(*valueZ);
+    float auxY = 0;
+    auxY+= matrizRotationZ[1][0]*(*valueX);
+    auxY+= matrizRotationZ[1][1]*(*valueY);
+    auxY+= matrizRotationZ[1][2]*(*valueZ);
+    float auxZ = 0;
+    auxZ+= matrizRotationZ[2][0]*(*valueX);
+    auxZ+= matrizRotationZ[2][1]*(*valueY);
+    auxZ+= matrizRotationZ[2][2]*(*valueZ);
+    *valueX = auxX;
+    *valueY = auxY;
+    *valueZ = auxZ;
 }
 
 #endif //PRACTICAS_MATRIX_H

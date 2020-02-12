@@ -9,6 +9,9 @@
 #include <math.h>
 #include "game.h"
 
+// Globals.
+static float square_color[3] = {1.0, 0.0, 0.0}; // Color of the square.
+
 
 //Dimensiones de la pantalla
 #define WidthWin 600
@@ -41,35 +44,52 @@ vector<Point> pointsWallZ = wallZ.getPoints();
 vector<Figure*> figures;
 
 
-Figure *figure = new Figure(rand() % 3 ,1,15,1);
+Figure *figure = new Figure(rand() % 3 ,rand() % 1+5,18,rand() % 3+5);
 
 void timer(int value){
-    if (showMessageStart){
-//        for(Cube cube: figure->cubes()){
-//            std::cout<<cube.getPointToArray().x<<" "<<cube.getPointToArray().y<<" "<<cube.getPointToArray().y<<endl;
-//        }
+    for(Figure *figure1: figures){
+        for(Cube  cube: figure1->cubes()) {
+           if(cube.getPoints()->y > 16){
+               std::cout<<"#################### FIN DEL JUEGO ##############"<<endl;
+                exit(0);
+           }
+        }
+    }
+    if (showMessageStart)
         if (figure->isValidateMove(0,-1,0, &figures)){
-//            cout<<"Puede bajar"<<endl;
             //refrescar pantalla
             figure->moveY(-1);
             glutPostRedisplay();
         }else{
-//            cout<<"No se puede bajar"<<endl;
             figures.push_back(figure);
-            figure = new Figure(rand() % 3,1,10,1);
+            figure = new Figure(rand() % 3 ,rand() % 1+5,18,rand() % 1+5);
             glutPostRedisplay();
         }
-    }
     glutTimerFunc(refreshMillis, timer, 0);
 }
 
-void printInteraction(){
-    cout<<""<<endl;
-    cout<<""<<endl;
+void restartGame(){
+    showMessageStart = false;
+    for(Figure* figure1: figures){
+        delete(figure1);
+    }
+    figures.clear();
+    figure = new Figure(rand() % 3 ,rand() % 1+5,18,rand() % 1+5);
+    glutPostRedisplay();
 }
 
-void init(){
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+void printInteraction(){
+    cout<<"Interation:"<<endl;
+    cout<<"Key [p] for stop/resume"<<endl;
+    cout<<"Key [z] for rotate on axis Z"<<endl;
+    cout<<"Key [x] for rotate on axis X"<<endl;
+    cout<<"Key [c] for rotate on axis Y"<<endl;
+    cout<<"Key [UP ARROW] for move to far"<<endl;
+    cout<<"Key [DOWN ARROW] for move to front"<<endl;
+    cout<<"Key [LEFT ARROW] for move to left"<<endl;
+    cout<<"Key [RIGHT ARROW] for move to right"<<endl;
+    cout<<"Key [+] for more velocity"<<endl;
+    cout<<"Key [END] for restart game"<<endl;
 }
 
 void resize(int w, int h){
@@ -85,33 +105,47 @@ void resize(int w, int h){
 
 void key(unsigned char key, int x, int y){
     switch (key){
-        case ' ':
+        case 'p':
             showMessageStart = !showMessageStart;
             break;
-        case '+':
-            figure->isValidateRotate(false, false, false);
-            break;
-        case '-':
-            break;
         case 'x':
-//            zoom_x = zoom_x + 10;
-            figure->rotationX();
+            if (figure->isValidateRotateX(&figures)){
+                figure->rotationX();
+            }
             break;
-        case 'X':
-            zoom_x = zoom_x - 10;
-//            figure->rotationY();
-            break;
-        case 'y':
-//            zoom_y = zoom_y + 10;
-            figure->rotationY();
-            break;
-        case 'Y':
-            zoom_y = zoom_y - 10;
+        case 'c':
+            if (figure->isValidateRotateY(&figures)){
+                figure->rotationY();
+            }
             break;
         case 'z':
-            figure->rotationZ();
+            if (figure->isValidateRotateZ(&figures)){
+                figure->rotationZ();
+            }
             break;
-        case '\n':
+        case 'u':
+            zoom_y+=10;
+//            cout<<"y "<<zoom_y<<endl;
+            break;
+        case 'i':
+            zoom_x+=10;
+//            cout<<"x "<<zoom_x<<endl;
+            break;
+        case 'o':
+            zoom_z+=10;
+//            cout<<" "<<zoom_z<<endl;
+            break;
+        case '+':
+            if (showMessageStart)
+                if (figure->isValidateMove(0,-1,0, &figures)){
+                    //refrescar pantalla
+                    figure->moveY(-1);
+                    glutPostRedisplay();
+                }else{
+                    figures.push_back(figure);
+                    figure = new Figure(rand() % 3,3,18,3);
+                    glutPostRedisplay();
+                }
             break;
         default:
             break;
@@ -126,11 +160,55 @@ void key(unsigned char key, int x, int y){
         zoom_y = 360;
     glutPostRedisplay();
 }
-void displayText(){
-    /**
-     * IMPRIMIR TEXTO
-     */
+
+// The top menu callback function.
+void top_menu(int id)
+{
+    if (id==1) exit(0);
 }
+void sub_menu(int id){
+    glutPostRedisplay();
+}
+
+// The sub-menu callback function.
+void view_menu(int id)
+{
+    if (id==2)
+    {
+        zoom_x = 200;
+        zoom_y =240;
+        zoom_z =310;
+    }
+
+    if (id==4)
+    {
+        zoom_x = 0;
+        zoom_y =0;
+        zoom_z = 0;
+    }
+    glutPostRedisplay();
+}
+// Routine to make the menu.
+void makeMenu(void)
+{
+    // The sub-menu is created first (because it should be visible when the top
+    // menu is created): its callback function is registered and menu entries added.
+    int sub_menu;
+    sub_menu = glutCreateMenu(view_menu);
+    glutAddMenuEntry("TOP", 2);
+    glutAddMenuEntry("NORMAL",4);
+
+    // The top menu is created: its callback function is registered and menu entries,
+    // including a submenu, added.
+    glutCreateMenu(top_menu);
+    glutAddSubMenu("View", sub_menu);
+    glutAddMenuEntry("Quit",1);
+
+    // The menu is attached to a mouse button.
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+
 void displayMe(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
@@ -212,15 +290,15 @@ void displayMe(){
 void specialKeyInput(int key, int x, int y){
     if (key == GLUT_KEY_UP)
     {
-        if (figure->isValidateMove(0,0,1, &figures)){
-            figure->moveZ(1);
+        if (figure->isValidateMove(0,0,-1, &figures)){
+            figure->moveZ(-1);
             glutPostRedisplay();
         }
     }
     if (key == GLUT_KEY_DOWN)
     {
-        if (figure->isValidateMove(0,0,-1, &figures)){
-            figure->moveZ(-1);
+        if (figure->isValidateMove(0,0,1, &figures)){
+            figure->moveZ(1);
             glutPostRedisplay();
         }
     }
@@ -238,25 +316,18 @@ void specialKeyInput(int key, int x, int y){
             glutPostRedisplay();
         }
     }
+    if(key == GLUT_KEY_END){
+        restartGame();
+    }
+}
+
+void init(){
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    // Make menu.
+    makeMenu();
 }
 
 int main(int argc, char **argv){
-    float point1 [3]={1,0,1};
-    float point2 [3]={0,0,0};
-    float point3 [3]={0,0,-1};
-    float point4 [3]={0,0,1};
-//    cout<<point1[0]<<" "<<point1[1]<<" "<<point1[2]<<endl;
-//    rotationZ(point1);
-//    cout<<point1[0]<<" "<<point1[1]<<" "<<point1[2]<<endl<<endl;
-//    cout<<point2[0]<<" "<<point2[1]<<" "<<point2[2]<<endl;
-//    rotationZ(point2);
-//    cout<<point2[0]<<" "<<point2[1]<<" "<<point2[2]<<endl<<endl;
-//    cout<<point3[0]<<" "<<point3[1]<<" "<<point3[2]<<endl;
-//    rotationZ(point3);
-//    cout<<point3[0]<<" "<<point3[1]<<" "<<point3[2]<<endl<<endl;
-//    cout<<point4[0]<<" "<<point4[1]<<" "<<point4[2]<<endl;
-//    rotationZ(point3);
-//    cout<<point4[0]<<" "<<point4[1]<<" "<<point4[2]<<endl<<endl;
     printInteraction();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_STENCIL | GLUT_MULTISAMPLE);
