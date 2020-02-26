@@ -124,6 +124,9 @@ def timer(value):
 def printInteraction():
     print("Interaction:")
     print("Presiona [ESCAPE] para finalizar.")
+    print("Presiona [SPACE] para reiniciar animacion.")
+    print("Presiona [+] para agregar mas circuferencias.")
+    print("Presiona [-] para quitar una circuferencia.")
 
 
 # FUncion para iniciar

@@ -19,7 +19,6 @@ void drawScene(){
 
     glPointSize(2);
     glBegin(GL_POINTS);
-    fori
     glEnd();
     glutSwapBuffers();
 }

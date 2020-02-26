@@ -2,13 +2,7 @@
  * ANGEL ARMANDO VALAY MARTINEZ
  */
 // LIBRERIAS DEL OPEN GL Y DE ESTANDAR
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>       /* for cos(), sin(), and sqrt() */
-#include <GL/glut.h>    /* OpenGL Utility Toolkit header */
-#include <iostream>
-#include "base.h"
+
 
 GLfloat angleY = 360.0;   /* in degrees */
 GLfloat angleX = 280.0;   /* in degrees */
