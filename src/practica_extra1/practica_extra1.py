@@ -231,7 +231,7 @@ def drawTextOnDisplay(string):
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(character))
 
 
-# FUncion principal
+# Funcion principal
 def main():
     setMaxDistances()
     printInteraction()
@@ -246,7 +246,6 @@ def main():
     glutKeyboardFunc(keyInput)
     init()
     glutMainLoop()
-
 
 # EJecutando el main
 main()

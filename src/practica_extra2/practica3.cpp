@@ -2,8 +2,8 @@
 #include <cstdlib>
 #include <vector>
 #include <iostream>
-#  include <GL/glew.h>
-#  include <GL/freeglut.h>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 
 // Use the STL extension of C++.
 using namespace std;

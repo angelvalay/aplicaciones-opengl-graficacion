@@ -18,6 +18,9 @@ add_executable(practicas-graficacion
 #        src/proyecto_2/matrix.h
 #        src/proyecto_2/game.h
 #        src/proyecto_2/proyecto_2.cpp)
-        src/practica_extra2/practica3.cpp)
+#        src/practica_extra2/practica3.cpp)
+        src/practica_extra5/getbmp.h
+        src/practica_extra5/getbmp.cpp
+        src/practica_extra5/practica_5.cpp)
 #src/practica_pelotas.cpp)
 target_link_libraries(practicas-graficacion ${OpenGlLinkers})
