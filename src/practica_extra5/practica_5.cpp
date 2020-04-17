@@ -1,49 +1,43 @@
-
+//LIBRERIAS NECESARIAS
 #include <iostream>
 #include "build.h"
-
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-
+//LIBRERIA PARA LAS TEXTURAS
 #include "getbmp.h"
-
 
 using namespace std;
 
-static unsigned int texture[4]; // Array of texture indices.
+//VARIABLE PARA GUARDAR LOS ID DE LAS TEXTURAS UTILIZADAS
+static unsigned int texture[4]; 
 
+//VARIABLE PAR MOVERSE EN Z
 double aumentoZ = -15.00;
 
-
+//CILINDROS NECESARIOS PARA EL DIBUJADO DE LA BOCINA
 GLUquadric* carcasa= gluNewQuadric();
 GLUquadric* membrana = gluNewQuadric();
 GLUquadric* base = gluNewQuadric();
 GLUquadric* aro = gluNewQuadric();
 
-
+//ANGULOS
 GLfloat angleX = 0;
-
 GLfloat angleY = 0;
-
 GLfloat angleZ = 0;
 
 static float R = 2.0; // Radius of hemisphere.
 static int p = 20; // Number of longitudinal slices.
 static int q = 4; // Number of latitudinal slices.
 
-/*scalex - scaling of sphere around x-axis
-   scaley - scaling of sphere around y-axis
-   r - radius of sphere
-  */
+//FUNCION PARA DIBUAR MEDIA ESFERA
 void drawHalfSphere() {
     glPolygonMode(GL_FRONT_AND_BACK, GL_POLYGON);
     glColor3f(0.0, 0.0, 0.0);
     int  i, j;
-    // Array of latitudinal triangle strips, each parallel to the equator, stacked one
-    // above the other from the equator to the north pole.
+    //CICLO PARA DIBUJAR LAS PARTES DE LA ESFERA
     for(j = 0; j < q; j++)
     {
-        // One latitudinal triangle strip.
+        //INICIA EL DIBUJADO DE CADA PARTE.
         glBegin(GL_TRIANGLE_STRIP);
         for(i = 0; i <= p; i++)
         {
@@ -62,7 +56,7 @@ void drawHalfSphere() {
     }
 }
 
-// Load launch image as a texture.
+// CARGA DE TEXTURAS.
 void loadExternalTextures()
 {
     BitMapFile *image[1];

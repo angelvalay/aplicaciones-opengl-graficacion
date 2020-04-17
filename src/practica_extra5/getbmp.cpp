@@ -6,7 +6,7 @@ using namespace std;
 
 // Routine to read an uncompressed 24-bit color RGB bmp file into a 
 // 32-bit color RGBA bitmap file (A value being set to 1).
-BitMapFile *getbmp(string filename)
+BitMapFile *getbmp(std::string filename)
 {
     int offset, headerSize;
 	

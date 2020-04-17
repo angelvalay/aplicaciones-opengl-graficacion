@@ -1,3 +1,5 @@
+
+#include <string>
 #ifndef GETBMP_H
 #define GETBMP_H
 
@@ -10,6 +12,6 @@ struct BitMapFile
    unsigned char *data;
 };
 
-BitMapFile *getbmp(string filename);
+BitMapFile *getbmp(std::string filename);
 
 #endif
