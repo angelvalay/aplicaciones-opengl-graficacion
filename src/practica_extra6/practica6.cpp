@@ -1,5 +1,4 @@
 /*  Program:  practica6
-    Ana Cristina Martinez Hernandez
 
     Se uso la libreria openglut.h
 
